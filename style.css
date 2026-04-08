@@ -148,26 +148,44 @@ nav .container {
 
 /* Burger */
 .burger {
-  display: flex; z-index: 101; position: relative;
-  background: none;
-  border: none;
+  display: flex;
+  z-index: 101;
+  position: relative;
+  background: var(--white);
+  border: var(--border);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
-  padding: 8px;
+  padding: 10px;
   flex-direction: column;
   gap: 5px;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.burger:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow);
+}
+
+.burger:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
 }
 
 .burger span {
   display: block;
-  width: 24px;
-  height: 3px;
+  width: 20px;
+  height: 2.5px;
   background: var(--black);
   transition: transform 0.2s, opacity 0.2s;
 }
 
-.burger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.burger.active {
+  background: var(--orange);
+}
+
+.burger.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 5px); }
 .burger.active span:nth-child(2) { opacity: 0; }
-.burger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+.burger.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -5px); }
 
 /* Mobile menu */
 .mobile-menu {
