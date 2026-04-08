@@ -883,7 +883,9 @@ section:nth-child(even) .section-label {
   gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 28px;
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: var(--border);
 }
 
 .stack-strip span {
@@ -902,10 +904,6 @@ section:nth-child(even) .section-label {
   box-shadow: var(--shadow);
 }
 
-.stack-strip .stack-highlight {
-  background: var(--orange-light);
-  border-color: var(--orange);
-}
 
 /* ===== Final CTA ===== */
 .final-cta {
