@@ -309,6 +309,7 @@ section:nth-child(even) .section-label {
   width: auto;
   opacity: 0.8;
   flex-shrink: 0;
+  filter: brightness(0) invert(1);
 }
 
 .marquee-logo-sm {
@@ -851,6 +852,20 @@ section:nth-child(even) .section-label {
 
 .about-content p {
   margin-bottom: 16px;
+}
+
+.logo-strip-dark {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo-strip-dark img {
+  height: 28px;
+  width: auto;
+  filter: brightness(0);
+  opacity: 0.6;
 }
 
 .stack-strip {
