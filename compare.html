@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forge — Hero Comparison</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFDF5;
+            --bg-alt: #FFF8ED;
+            --black: #000000;
+            --white: #FFFFFF;
+            --orange: #F97316;
+            --orange-light: #FFF3E6;
+            --blue: #4A90D9;
+            --text: #1a1a1a;
+            --text-muted: #555;
+            --border: 2px solid var(--black);
+            --border-thick: 3px solid var(--black);
+            --shadow-sm: 3px 3px 0 0 var(--black);
+            --shadow: 5px 5px 0 0 var(--black);
+            --shadow-lg: 8px 8px 0 0 var(--black);
+            --shadow-xl: 12px 12px 0 0 var(--black);
+            --font-display: 'Space Grotesk', system-ui, sans-serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: #ddd;
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        a { color: var(--blue); text-decoration: none; }
+
+        /* ===== Variant Label ===== */
+        .variant-label {
+            text-align: center;
+            padding: 20px;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: var(--black);
+            color: var(--white);
+            letter-spacing: 0.05em;
+        }
+
+        .variant-label span {
+            color: var(--orange);
+        }
+
+        /* ===== Shared Nav ===== */
+        .nav {
+            padding: 16px 0;
+            border-bottom: var(--border);
+            background: var(--bg);
+        }
+
+        .nav .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+
+        .logo em { color: var(--orange); font-style: normal; }
+
+        .nav-cta {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.875rem;
+            padding: 10px 20px;
+            background: var(--orange);
+            color: var(--black);
+            border: var(--border);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+        }
+
+        /* ===== Buttons ===== */
+        .btn {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 32px;
+            border: var(--border-thick);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--orange);
+            color: var(--black);
+            box-shadow: var(--shadow-lg);
+            font-size: 1.05rem;
+            padding: 16px 36px;
+        }
+
+        .logo-strip-simple {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-strip-simple span {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* ============================================================
+           VARIANT A — Split + Card Offer
+           ============================================================ */
+        .hero-a {
+            padding: 80px 0 64px;
+            background: var(--bg);
+            border-bottom: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-a::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(var(--black) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.04;
+            pointer-events: none;
+        }
+
+        .hero-a .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-a-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-a-left .section-label {
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .hero-a-left h1 {
+            font-size: clamp(2.2rem, 5.5vw, 3.5rem);
+            margin-bottom: 0;
+        }
+
+        .hero-a-card {
+            background: var(--white);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-xl);
+            padding: 36px 32px;
+        }
+
+        .hero-a-card .subtitle {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .hero-a-card .btn-primary {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .hero-a-card .cta-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+            margin-bottom: 0;
+        }
+
+        .hero-a-social {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: var(--border);
+        }
+
+        .hero-a-social p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        /* ============================================================
+           VARIANT B — Black Strip + Left Align + Oversized Number
+           ============================================================ */
+        .hero-b-strip {
+            background: var(--black);
+            padding: 14px 0;
+            border-bottom: var(--border);
+        }
+
+        .hero-b-strip .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero-b-strip .logo-strip-dark {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-b-strip .logo-strip-dark span {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-b-strip .strip-lead {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            white-space: nowrap;
+        }
+
+        .hero-b {
+            padding: 72px 0 64px;
+            background: var(--bg);
+            border-bottom: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-b::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 16rem;
+            color: var(--black);
+            opacity: 0.04;
+            line-height: 1;
+            pointer-events: none;
+            content: '200+';
+        }
+
+        .hero-b .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-b .section-label {
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .hero-b h1 {
+            font-size: clamp(2.2rem, 5.5vw, 3.5rem);
+            margin-bottom: 20px;
+            max-width: 680px;
+        }
+
+        .hero-b .subtitle {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 540px;
+            margin-bottom: 36px;
+        }
+
+        .hero-b .cta-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 0;
+        }
+
+        .hero-b .cta-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* ===== Responsive ===== */
+        @media (min-width: 768px) {
+            .hero-a-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 48px;
+            }
+
+            .hero-b h1 {
+                font-size: clamp(2.5rem, 5.5vw, 3.5rem);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<div class="variant-label"><span>A</span> — Split Layout + Card Offer</div>
+<!-- ============================================================ -->
+
+<div class="nav">
+    <div class="container">
+        <div class="logo"><em>F</em>ORGE</div>
+        <a href="#" class="nav-cta">Получить план</a>
+    </div>
+</div>
+
+<section class="hero-a">
+    <div class="container">
+        <div class="hero-a-grid">
+            <div class="hero-a-left">
+                <p class="section-label">Внедрение AI в бизнес</p>
+                <h1>Ваша команда тратит часы на работу, которую можно не делать</h1>
+            </div>
+            <div class="hero-a-card">
+                <p class="subtitle">Убираем рутину и добавляем возможности, которых раньше не было — с помощью AI. 2-4 недели, фикс-прайс.</p>
+                <a href="#" class="btn btn-primary">Получить план внедрения AI — бесплатно</a>
+                <p class="cta-sub">30-минутный разбор ваших процессов. Покажем, где AI даст максимальный эффект.</p>
+                <div class="hero-a-social">
+                    <p>7 лет в разработке. 200+ проектов. В портфолио:</p>
+                    <div class="logo-strip-simple">
+                        <span>Альфа-Банк</span>
+                        <span>М.Видео</span>
+                        <span>Норникель</span>
+                        <span>КХЛ</span>
+                        <span>Магнит</span>
+                        <span>Teachbase</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<div class="variant-label"><span>B</span> — Black Trust Strip + Left Align + Oversized Number</div>
+<!-- ============================================================ -->
+
+<div class="nav">
+    <div class="container">
+        <div class="logo"><em>F</em>ORGE</div>
+        <a href="#" class="nav-cta">Получить план</a>
+    </div>
+</div>
+
+<div class="hero-b-strip">
+    <div class="container">
+        <div class="logo-strip-dark">
+            <span class="strip-lead">7 лет, 200+ проектов:</span>
+            <span>Альфа-Банк</span>
+            <span>М.Видео</span>
+            <span>Норникель</span>
+            <span>КХЛ</span>
+            <span>Магнит</span>
+            <span>Teachbase</span>
+        </div>
+    </div>
+</div>
+
+<section class="hero-b">
+    <div class="container">
+        <p class="section-label">Внедрение AI в бизнес</p>
+        <h1>Ваша команда тратит часы на работу, которую можно не делать</h1>
+        <p class="subtitle">Убираем рутину и добавляем возможности, которых раньше не было — с помощью AI. 2-4 недели, фикс-прайс.</p>
+        <div class="cta-row">
+            <a href="#" class="btn btn-primary">Получить план внедрения AI — бесплатно</a>
+            <span class="cta-sub">30-минутный разбор ваших процессов.<br>Покажем, где AI даст максимальный эффект.</span>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
