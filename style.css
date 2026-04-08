@@ -180,7 +180,7 @@ section:nth-child(even) {
 .hero {
   min-height: calc(100vh - 56px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   background: var(--bg);
   border-bottom: var(--border);
   position: relative;
@@ -201,7 +201,7 @@ section:nth-child(even) {
 .hero-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 40px;
+  padding: 48px 40px 60px;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -261,38 +261,39 @@ section:nth-child(even) {
   background: var(--black);
   border-bottom: var(--border);
   overflow: hidden;
-  padding: 12px 0;
+  padding: 18px 0;
 }
 
 .marquee-track {
   display: flex;
-  gap: 40px;
+  gap: 48px;
   align-items: center;
-  animation: marquee 25s linear infinite;
+  animation: marquee 30s linear infinite;
   width: max-content;
 }
 
 .marquee-track span {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: rgba(255,255,255,0.5);
   white-space: nowrap;
 }
 
 .marquee-track .marquee-highlight {
   color: var(--orange);
+  font-size: 1.05rem;
 }
 
 .marquee-track .sep {
   color: rgba(255,255,255,0.15);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
 }
 
 .marquee-logo {
-  height: 20px;
+  height: 32px;
   width: auto;
-  opacity: 0.7;
+  opacity: 0.8;
   flex-shrink: 0;
 }
 
