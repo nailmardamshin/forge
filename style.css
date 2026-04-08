@@ -453,8 +453,8 @@ section:nth-child(even) .section-label {
   transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.trigger-card:nth-child(2) { border-left-color: var(--orange); }
-.trigger-card:nth-child(3) { border-left-color: var(--blue); }
+.trigger-card:nth-child(2) { border-left-color: var(--blue); }
+.trigger-card:nth-child(3) { border-left-color: var(--orange); }
 .trigger-card:nth-child(4) { border-left-color: var(--blue); }
 .trigger-card:nth-child(5) { border-left-color: var(--orange); }
 
@@ -916,6 +916,16 @@ footer {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ===== Mobile trigger card reorder ===== */
+@media (max-width: 640px) {
+  .trigger-grid { display: flex; flex-direction: column; }
+  .trigger-card:nth-child(1) { order: 1; }
+  .trigger-card:nth-child(2) { order: 2; }
+  .trigger-card:nth-child(3) { order: 4; }
+  .trigger-card:nth-child(4) { order: 3; }
+  .trigger-card:nth-child(5) { order: 5; }
 }
 
 /* ===== Mobile table → cards ===== */
