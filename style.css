@@ -920,7 +920,7 @@ section:nth-child(even) .section-label {
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
-  align-items: center;
+  align-items: start;
 }
 
 .cta-card-text h2 {
@@ -932,13 +932,6 @@ section:nth-child(even) .section-label {
   color: var(--text-muted);
   margin-bottom: 8px;
   max-width: none;
-}
-
-.cta-card-text .cta-sub {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-  opacity: 0.6;
-  margin-bottom: 0;
 }
 
 .cta-card-action {
@@ -1053,14 +1046,16 @@ footer {
   }
 }
 
-/* Point B entrance */
-.fade-in .point-b {
-  transform: scale(0.97);
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+/* Point B entrance — separate observer in JS for later trigger */
+.point-b {
+  transform: scale(0.96);
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
 }
 
-.fade-in.visible .point-b {
+.point-b.visible {
   transform: scale(1);
+  opacity: 1;
 }
 
 /* Timeline connector draw */
@@ -1119,19 +1114,20 @@ footer {
   50% { box-shadow: 12px 12px 0 0 var(--black); }
 }
 
-/* Decorative cross in hero */
+/* Decorative text in hero */
 .hero-inner::after {
-  content: '+';
+  content: 'AI';
   position: absolute;
   right: 0;
   bottom: 15%;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 12rem;
+  font-size: 14rem;
   line-height: 1;
   color: var(--orange);
   opacity: 0.05;
   pointer-events: none;
+  letter-spacing: -0.04em;
 }
 
 /* ===== Mobile trigger card reorder (alternate colors) ===== */
