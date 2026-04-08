@@ -464,8 +464,8 @@ section:nth-child(even) .section-label {
   transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.trigger-card:nth-child(2) { border-left-color: var(--blue); }
-.trigger-card:nth-child(3) { border-left-color: var(--blue); }
+.trigger-card:nth-child(2) { border-left-color: var(--orange); }
+.trigger-card:nth-child(3) { border-left-color: var(--orange); }
 .trigger-card:nth-child(4) { border-left-color: var(--orange); }
 .trigger-card:nth-child(5) { border-left-color: var(--orange); }
 
