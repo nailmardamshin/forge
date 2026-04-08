@@ -682,27 +682,28 @@ section:nth-child(even) .section-label {
 }
 
 .competitor-card .comp-header {
-  background: var(--black);
-  color: var(--white);
+  background: var(--white);
+  color: var(--text);
   padding: 14px 20px;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
+  border-bottom: var(--border);
 }
 
 .competitor-card .comp-problem {
   padding: 16px 20px;
   font-size: var(--text-sm);
   color: var(--text-muted);
-  border-bottom: var(--border-thick);
 }
 
 .competitor-card .comp-forge {
   padding: 16px 20px;
   font-size: var(--text-sm);
-  background: var(--orange);
+  background: var(--orange-light);
   font-weight: 600;
   margin-top: auto;
+  border-top: var(--border);
 }
 
 /* ===== Cases ===== */
