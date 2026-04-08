@@ -317,6 +317,10 @@ section:nth-child(even) .section-label {
   filter: brightness(0) invert(1);
 }
 
+.marquee-logo-native {
+  filter: none;
+}
+
 .marquee-logo-sm {
   height: 28px;
 }
@@ -874,11 +878,27 @@ section:nth-child(even) .section-label {
   mix-blend-mode: multiply;
 }
 
+.stack-groups {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stack-group-label {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
 .stack-strip {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
-  margin-top: 28px;
 }
 
 .stack-strip span {
