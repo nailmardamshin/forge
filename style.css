@@ -1106,7 +1106,12 @@ footer {
 
   .step-num { margin: 0 0 16px; }
 
-  .cases-grid { grid-template-columns: repeat(3, 1fr); }
+  .cases-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .case-card:last-child {
+    grid-column: 1 / -1;
+  }
   .guarantees-grid { grid-template-columns: repeat(4, 1fr); }
   .competitor-grid { grid-template-columns: repeat(2, 1fr); }
 }
