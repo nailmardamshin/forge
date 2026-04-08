@@ -824,6 +824,8 @@ section:nth-child(even) .section-label {
   max-width: 660px;
   font-size: var(--text-base);
   line-height: 1.7;
+  border-left: 6px solid var(--orange);
+  padding-left: 24px;
 }
 
 .about-content p {
@@ -853,6 +855,11 @@ section:nth-child(even) .section-label {
   box-shadow: var(--shadow);
 }
 
+.stack-strip .stack-highlight {
+  background: var(--orange-light);
+  border-color: var(--orange);
+}
+
 /* ===== Final CTA ===== */
 .final-cta {
   text-align: center;
@@ -876,7 +883,7 @@ section:nth-child(even) .section-label {
   background: var(--orange);
   color: var(--black);
   box-shadow: 5px 5px 0 0 var(--orange);
-  border-color: var(--orange);
+  border-color: var(--black);
 }
 
 .final-cta .btn-primary:hover {
