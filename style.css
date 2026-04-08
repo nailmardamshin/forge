@@ -282,7 +282,7 @@ section {
 }
 
 /* Alternating section backgrounds for rhythm */
-section:nth-child(even) {
+section:nth-child(even):not(.final-cta) {
   background: var(--bg-alt);
 }
 
