@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // === Accordion for barriers — smooth scrollHeight ===
   document.querySelectorAll('.barrier-q').forEach(q => {
     q.addEventListener('click', () => {
@@ -45,6 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
     firstAnswer.style.maxHeight = firstAnswer.scrollHeight + 36 + 'px';
   }
 
+  // Recalc open accordion on resize
+  window.addEventListener('resize', () => {
+    const open = document.querySelector('.barrier.open .barrier-a');
+    if (open) open.style.maxHeight = open.scrollHeight + 36 + 'px';
+  });
+
   // === Marquee — drag-to-scroll + hover-slow + momentum ===
   const strip = document.querySelector('.marquee-strip');
   const track = document.querySelector('.marquee-track');
@@ -57,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let velocity = 0;
 
     track.style.animation = 'none';
+    if (prefersReducedMotion) targetSpeed = 0;
 
     function getHalfWidth() {
       return track.scrollWidth / 2;
@@ -154,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // === Counter animation for case stats ===
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function easeOutExpo(t) {
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);

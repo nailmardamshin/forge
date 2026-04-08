@@ -1097,7 +1097,9 @@ footer {
   }
 }
 
-/* CTA shadow pulse — 2 repeats then stop */
+/* CTA shadow pulse — 2 repeats then stop.
+   NB: btn inherits visibility from parent .cta-row hero-in animation.
+   Only box-shadow is pulsed here — don't add opacity/transform animations. */
 .hero .btn-primary {
   animation: cta-pulse 1.8s ease 2s 2;
 }
