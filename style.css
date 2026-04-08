@@ -97,6 +97,7 @@ p:last-child { margin-bottom: 0; }
 .btn:active {
   transform: translate(2px, 2px);
   box-shadow: none;
+  transition-duration: 0.05s;
 }
 
 .btn-primary {
@@ -667,7 +668,6 @@ section:nth-child(even) .section-label {
 
 .barrier.open .barrier-a {
   padding: 18px 20px;
-  max-height: 400px;
 }
 
 /* ===== Competitors ===== */
@@ -801,7 +801,7 @@ section:nth-child(even) .section-label {
   font-size: 7rem;
   line-height: 1;
   color: var(--black);
-  opacity: 0.04;
+  opacity: 0.07;
   pointer-events: none;
 }
 
@@ -985,6 +985,13 @@ footer {
   }
   .point-b { transform: none !important; }
   .step:not(:last-child)::after { transform: none !important; animation: none !important; }
+  .hero .section-label,
+  .hero h1,
+  .hero .subtitle,
+  .hero .cta-row {
+    opacity: 1 !important; transform: none !important; animation: none !important;
+  }
+  .hero .btn-primary { animation: none !important; }
 }
 
 .fade-in {
@@ -1055,11 +1062,59 @@ footer {
   to { transform: scaleX(1); }
 }
 
+/* Hero entrance stagger */
+.hero .section-label,
+.hero h1,
+.hero .subtitle,
+.hero .cta-row {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: hero-in 0.5s ease forwards;
+}
+
+.hero .section-label { animation-delay: 0.1s; }
+.hero h1 { animation-delay: 0.25s; }
+.hero .subtitle { animation-delay: 0.4s; }
+.hero .cta-row { animation-delay: 0.55s; }
+
+@keyframes hero-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* CTA shadow pulse — 2 repeats then stop */
+.hero .btn-primary {
+  animation: cta-pulse 1.8s ease 2s 2;
+}
+
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 8px 8px 0 0 var(--black); }
+  50% { box-shadow: 12px 12px 0 0 var(--black); }
+}
+
+/* Decorative cross in hero */
+.hero-inner::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  bottom: 15%;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12rem;
+  line-height: 1;
+  color: var(--orange);
+  opacity: 0.05;
+  pointer-events: none;
+}
+
 /* ===== Mobile trigger card reorder (alternate colors) ===== */
 @media (max-width: 640px) {
   .trigger-grid { display: flex; flex-direction: column; }
   .trigger-card:nth-child(4) { order: 5; }
   .trigger-card:nth-child(5) { order: 4; }
+  .hero-inner::after { display: none; }
 }
 
 /* ===== Mobile table → cards ===== */

@@ -1,7 +1,7 @@
 // Forge Landing — Interactions
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Scroll fade-in
+  // === Scroll fade-in (threshold 0.25 for later trigger) ===
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -9,59 +9,97 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.25 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-  // Accordion for barriers
+  // === Accordion for barriers — smooth scrollHeight ===
   document.querySelectorAll('.barrier-q').forEach(q => {
     q.addEventListener('click', () => {
       const barrier = q.parentElement;
+      const answer = barrier.querySelector('.barrier-a');
       const wasOpen = barrier.classList.contains('open');
-      document.querySelectorAll('.barrier.open').forEach(b => b.classList.remove('open'));
-      if (!wasOpen) barrier.classList.add('open');
+
+      // Close all open barriers
+      document.querySelectorAll('.barrier.open').forEach(b => {
+        if (b === barrier) return;
+        b.querySelector('.barrier-a').style.maxHeight = '0';
+        b.classList.remove('open');
+      });
+
+      if (wasOpen) {
+        answer.style.maxHeight = '0';
+        barrier.classList.remove('open');
+      } else {
+        barrier.classList.add('open');
+        answer.style.maxHeight = answer.scrollHeight + 36 + 'px';
+      }
     });
   });
 
+  // Open first barrier on load
   const firstBarrier = document.querySelector('.barrier');
-  if (firstBarrier) firstBarrier.classList.add('open');
+  if (firstBarrier) {
+    firstBarrier.classList.add('open');
+    const firstAnswer = firstBarrier.querySelector('.barrier-a');
+    firstAnswer.style.maxHeight = firstAnswer.scrollHeight + 36 + 'px';
+  }
 
-  // Marquee drag-to-scroll (seamless)
+  // === Marquee — drag-to-scroll + hover-slow + momentum ===
   const strip = document.querySelector('.marquee-strip');
   const track = document.querySelector('.marquee-track');
   if (strip && track) {
     let isDragging = false;
     let startX;
     let offset = 0;
-    let rafId = null;
-    const speed = 1; // px per frame (~60fps = ~60px/sec)
+    let currentSpeed = 1;
+    let targetSpeed = 1;
+    let velocity = 0;
 
-    // Stop CSS animation, use JS animation instead for seamless control
     track.style.animation = 'none';
 
-    // Half width = one full set of logos (duplicate wraps)
     function getHalfWidth() {
       return track.scrollWidth / 2;
     }
 
     function animate() {
+      // Smooth speed interpolation
+      currentSpeed += (targetSpeed - currentSpeed) * 0.08;
+
       if (!isDragging) {
-        offset -= speed;
+        if (Math.abs(velocity) > 0.5) {
+          // Momentum after drag
+          offset += velocity;
+          velocity *= 0.95;
+        } else {
+          // Normal auto-scroll
+          offset -= currentSpeed;
+          velocity = 0;
+        }
       }
+
       const half = getHalfWidth();
-      // Wrap seamlessly
       if (offset <= -half) offset += half;
       if (offset > 0) offset -= half;
       track.style.transform = `translateX(${offset}px)`;
-      rafId = requestAnimationFrame(animate);
+      requestAnimationFrame(animate);
     }
 
-    rafId = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
+
+    // Hover: slow down
+    strip.addEventListener('mouseenter', () => {
+      if (!isDragging) targetSpeed = 0.3;
+    });
+    strip.addEventListener('mouseleave', () => {
+      targetSpeed = 1;
+    });
 
     // Mouse drag
     strip.addEventListener('mousedown', (e) => {
       isDragging = true;
       startX = e.clientX;
+      velocity = 0;
       strip.style.cursor = 'grabbing';
       e.preventDefault();
     });
@@ -70,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isDragging) return;
       const dx = e.clientX - startX;
       offset += dx;
+      velocity = dx * 0.5;
       startX = e.clientX;
     });
 
@@ -81,16 +120,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     strip.style.cursor = 'grab';
 
-    // Touch drag
+    // Touch drag with momentum
     strip.addEventListener('touchstart', (e) => {
       isDragging = true;
       startX = e.touches[0].clientX;
+      velocity = 0;
     }, { passive: true });
 
     strip.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
       const dx = e.touches[0].clientX - startX;
       offset += dx;
+      velocity = dx * 0.5;
       startX = e.touches[0].clientX;
     }, { passive: true });
 
@@ -99,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // === Nav shrink on scroll ===
+  // === Nav shadow on scroll ===
   const navEl = document.querySelector('nav');
   let navTicking = false;
   window.addEventListener('scroll', () => {
