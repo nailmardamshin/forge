@@ -476,37 +476,41 @@ section:nth-child(even) .section-label {
 
 /* ===== Micro Jobs ===== */
 .jobs-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .job-card {
-  background: var(--white);
-  border: var(--border-thick);
-  box-shadow: var(--shadow);
-  padding: 28px 24px;
-  transition: transform 0.15s, box-shadow 0.15s;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 20px;
+  align-items: start;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 28px 0;
+  border-bottom: var(--border);
+  position: relative;
 }
 
-.job-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-lg);
-}
+.job-card:last-child { border-bottom: none; }
 
 .job-number {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--orange);
-  border: var(--border-thick);
-  box-shadow: var(--shadow-sm);
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: var(--text-lg);
-  margin-bottom: 14px;
+  font-size: 2.5rem;
+  color: var(--orange);
+  margin-bottom: 0;
+  line-height: 1;
 }
 
 /* ===== Point B ===== */
@@ -883,7 +887,6 @@ footer {
 
 /* Staggered children animation */
 .fade-in.visible .trigger-card,
-.fade-in.visible .job-card,
 .fade-in.visible .competitor-card,
 .fade-in.visible .guarantee-card,
 .fade-in.visible .case-card,
@@ -966,7 +969,7 @@ footer {
 /* ===== Responsive ===== */
 @media (min-width: 640px) {
   .trigger-grid { grid-template-columns: 1fr 1fr; }
-  .jobs-grid { grid-template-columns: 1fr 1fr; }
+  /* jobs-grid is now flex column, no grid override needed */
   .guarantees-grid { grid-template-columns: 1fr 1fr; }
   .competitor-grid { grid-template-columns: 1fr 1fr; }
   .cases-grid { grid-template-columns: 1fr 1fr; }
