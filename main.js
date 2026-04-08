@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'none';
+            entry.target.classList.add('in-view');
             obs.unobserve(entry.target);
           }
         });
@@ -184,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === Stack-strip stagger delays ===
   document.querySelectorAll('.stack-strip span').forEach((span, i) => {
-    span.style.animationDelay = (i * 0.03) + 's';
+    span.style.animationDelay = (i * 0.04) + 's';
   });
 
   // === Nav shadow on scroll ===
@@ -231,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function animateCounter(el, parsed, duration) {
     const { value, suffix, hasThousandSep } = parsed;
-    duration = duration || 1500;
+    duration = duration || 2000;
     const startTime = performance.now();
 
     function tick(now) {

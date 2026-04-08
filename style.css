@@ -462,10 +462,30 @@ section:nth-child(even) .section-label {
   padding: 20px 24px;
   border-left: 6px solid var(--orange);
   transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden;
 }
 
-.trigger-card:nth-child(2) { border-left-color: var(--orange); }
-.trigger-card:nth-child(3) { border-left-color: var(--orange); }
+.trigger-card::after {
+  position: absolute;
+  right: -5px;
+  bottom: -12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 5rem;
+  line-height: 1;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.trigger-card:nth-child(1)::after { content: '↗'; color: var(--orange); }
+.trigger-card:nth-child(2)::after { content: '?'; color: var(--blue); }
+.trigger-card:nth-child(3)::after { content: '!'; color: var(--blue); }
+.trigger-card:nth-child(4)::after { content: '#'; color: var(--orange); }
+.trigger-card:nth-child(5)::after { content: '»'; color: var(--orange); }
+
+.trigger-card:nth-child(2) { border-left-color: var(--blue); }
+.trigger-card:nth-child(3) { border-left-color: var(--blue); }
 .trigger-card:nth-child(4) { border-left-color: var(--orange); }
 .trigger-card:nth-child(5) { border-left-color: var(--orange); }
 
@@ -502,6 +522,12 @@ section:nth-child(even) .section-label {
   background: var(--white);
   border-bottom: var(--border-thick);
   padding: 0;
+  transition: transform 0.15s;
+  cursor: default;
+}
+
+.job-card:hover {
+  transform: translateX(4px);
 }
 
 .job-card:last-child { border-bottom: none; }
@@ -512,7 +538,7 @@ section:nth-child(even) .section-label {
   justify-content: center;
   width: auto;
   height: auto;
-  background: var(--white);
+  background: var(--orange-light);
   border: none;
   border-right: var(--border-thick);
   box-shadow: none;
@@ -1011,8 +1037,8 @@ footer {
 
 .fade-in {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .fade-in.visible {
@@ -1026,17 +1052,19 @@ footer {
 .fade-in.visible .guarantee-card,
 .fade-in.visible .case-card,
 .fade-in.visible .barrier,
-.fade-in.visible .step {
+.fade-in.visible .step,
+.fade-in.visible .job-card,
+.fade-in.visible .aha-table tbody tr {
   opacity: 0;
   transform: translateY(16px);
-  animation: stagger-in 0.4s ease forwards;
+  animation: stagger-in 0.5s ease forwards;
 }
 
 .fade-in.visible :nth-child(1) { animation-delay: 0s; }
-.fade-in.visible :nth-child(2) { animation-delay: 0.07s; }
-.fade-in.visible :nth-child(3) { animation-delay: 0.14s; }
-.fade-in.visible :nth-child(4) { animation-delay: 0.21s; }
-.fade-in.visible :nth-child(5) { animation-delay: 0.28s; }
+.fade-in.visible :nth-child(2) { animation-delay: 0.1s; }
+.fade-in.visible :nth-child(3) { animation-delay: 0.2s; }
+.fade-in.visible :nth-child(4) { animation-delay: 0.3s; }
+.fade-in.visible :nth-child(5) { animation-delay: 0.4s; }
 
 @keyframes stagger-in {
   to {
@@ -1047,11 +1075,32 @@ footer {
 
 /* Point B entrance — styles set via JS to avoid noscript issues */
 
+/* Point B decorative arrow */
+.point-b::before {
+  content: '→';
+  position: absolute;
+  right: -10px;
+  bottom: -30px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10rem;
+  line-height: 1;
+  color: var(--black);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Final CTA button pulse when visible */
+.final-cta.in-view .btn-primary {
+  animation: cta-pulse 1.8s ease 1s 2;
+}
+
 /* Stack-strip stagger */
 .fade-in.visible .stack-strip span {
   opacity: 0;
   transform: translateY(8px);
-  animation: stagger-in 0.3s ease forwards;
+  animation: stagger-in 0.4s ease forwards;
 }
 
 /* Timeline connector draw */
@@ -1061,12 +1110,12 @@ footer {
 }
 
 .fade-in.visible .step:not(:last-child)::after {
-  animation: line-draw-v 0.5s ease forwards;
+  animation: line-draw-v 0.7s ease forwards;
 }
 
-.fade-in.visible .step:nth-child(1)::after { animation-delay: 0.35s; }
-.fade-in.visible .step:nth-child(2)::after { animation-delay: 0.45s; }
-.fade-in.visible .step:nth-child(3)::after { animation-delay: 0.55s; }
+.fade-in.visible .step:nth-child(1)::after { animation-delay: 0.5s; }
+.fade-in.visible .step:nth-child(2)::after { animation-delay: 0.7s; }
+.fade-in.visible .step:nth-child(3)::after { animation-delay: 0.9s; }
 
 @keyframes line-draw-v {
   to { transform: scaleY(1); }
@@ -1083,13 +1132,13 @@ footer {
 .hero .cta-row {
   opacity: 0;
   transform: translateY(20px);
-  animation: hero-in 0.5s ease forwards;
+  animation: hero-in 0.6s ease forwards;
 }
 
-.hero .section-label { animation-delay: 0.1s; }
-.hero h1 { animation-delay: 0.25s; }
-.hero .subtitle { animation-delay: 0.4s; }
-.hero .cta-row { animation-delay: 0.55s; }
+.hero .section-label { animation-delay: 0.15s; }
+.hero h1 { animation-delay: 0.35s; }
+.hero .subtitle { animation-delay: 0.55s; }
+.hero .cta-row { animation-delay: 0.75s; }
 
 @keyframes hero-in {
   to {
@@ -1102,7 +1151,7 @@ footer {
    NB: btn inherits visibility from parent .cta-row hero-in animation.
    Only box-shadow is pulsed here — don't add opacity/transform animations. */
 .hero .btn-primary {
-  animation: cta-pulse 1.8s ease 2s 2;
+  animation: cta-pulse 1.8s ease 2.5s 2;
 }
 
 @keyframes cta-pulse {
@@ -1140,7 +1189,8 @@ footer {
   .trigger-grid { display: flex; flex-direction: column; }
   .trigger-card:nth-child(4) { order: 5; }
   .trigger-card:nth-child(5) { order: 4; }
-  .hero-inner::after { font-size: 6rem; right: 10px; bottom: 5%; }
+  .hero-inner::after { font-size: 7rem; right: 10px; bottom: 5%; }
+  @keyframes ai-fade { to { opacity: 0.08; transform: translateY(0); } }
 }
 
 /* ===== Mobile table → cards ===== */
@@ -1180,8 +1230,8 @@ footer {
     font-size: var(--text-base);
     border-right: none;
     background: var(--white);
-    color: var(--text);
-    border-bottom: var(--border-thick);
+    color: var(--orange);
+    border-bottom: var(--border);
     white-space: normal;
   }
 
@@ -1211,8 +1261,12 @@ footer {
 
 /* ===== Mobile small ===== */
 @media (max-width: 480px) {
+  .hero-viewport {
+    min-height: auto;
+  }
+
   .hero-inner {
-    padding: 20px 20px 0;
+    padding: 24px 20px 32px;
   }
 
   .hero h1 {
