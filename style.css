@@ -305,6 +305,10 @@ section:nth-child(even) {
   flex-shrink: 0;
 }
 
+.marquee-logo-sm {
+  height: 36px;
+}
+
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
