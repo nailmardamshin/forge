@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forge — Hero Comparison</title>
+    <title>Forge — Hero Comparison v2</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #FFFDF5;
-            --bg-alt: #FFF8ED;
             --black: #000000;
             --white: #FFFFFF;
             --orange: #F97316;
             --orange-light: #FFF3E6;
             --blue: #4A90D9;
+            --blue-light: #E8F4FD;
             --text: #1a1a1a;
             --text-muted: #555;
             --border: 2px solid var(--black);
             --border-thick: 3px solid var(--black);
-            --shadow-sm: 3px 3px 0 0 var(--black);
             --shadow: 5px 5px 0 0 var(--black);
             --shadow-lg: 8px 8px 0 0 var(--black);
             --shadow-xl: 12px 12px 0 0 var(--black);
@@ -32,7 +31,7 @@
 
         body {
             font-family: var(--font-body);
-            background: #ddd;
+            background: #ccc;
             color: var(--text);
             line-height: 1.65;
             -webkit-font-smoothing: antialiased;
@@ -41,308 +40,358 @@
         h1, h2, h3 {
             font-family: var(--font-display);
             font-weight: 700;
-            line-height: 1.15;
-            letter-spacing: -0.02em;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
         }
 
         a { color: var(--blue); text-decoration: none; }
 
-        /* ===== Variant Label ===== */
+        /* ===== Variant Separator ===== */
         .variant-label {
             text-align: center;
-            padding: 20px;
+            padding: 24px;
             font-family: var(--font-display);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            background: var(--black);
+            background: #333;
             color: var(--white);
             letter-spacing: 0.05em;
         }
+        .variant-label span { color: var(--orange); }
 
-        .variant-label span {
-            color: var(--orange);
-        }
-
-        /* ===== Shared Nav ===== */
+        /* ===== Shared: Nav ===== */
         .nav {
             padding: 16px 0;
             border-bottom: var(--border);
             background: var(--bg);
         }
-
-        .nav .container {
-            max-width: 900px;
+        .nav-inner {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             font-family: var(--font-display);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.03em;
             text-transform: uppercase;
         }
-
         .logo em { color: var(--orange); font-style: normal; }
-
         .nav-cta {
             font-family: var(--font-display);
             font-weight: 700;
             font-size: 0.875rem;
-            padding: 10px 20px;
+            padding: 10px 24px;
             background: var(--orange);
             color: var(--black);
             border: var(--border);
-            box-shadow: var(--shadow-sm);
+            box-shadow: 3px 3px 0 0 var(--black);
             text-decoration: none;
         }
 
-        /* ===== Buttons ===== */
+        /* ===== Shared: Marquee Strip ===== */
+        .marquee-strip {
+            background: var(--black);
+            border-bottom: var(--border);
+            overflow: hidden;
+            padding: 10px 0;
+            position: relative;
+        }
+        .marquee-track {
+            display: flex;
+            gap: 48px;
+            align-items: center;
+            animation: marquee 20s linear infinite;
+            width: max-content;
+        }
+        .marquee-track span {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            white-space: nowrap;
+            letter-spacing: 0.03em;
+        }
+        .marquee-track .sep {
+            color: rgba(255,255,255,0.2);
+            font-size: 0.6rem;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ===== Shared: Button ===== */
         .btn {
             display: inline-block;
             font-family: var(--font-display);
             font-weight: 700;
-            font-size: 1rem;
-            padding: 14px 32px;
+            padding: 18px 40px;
             border: var(--border-thick);
             cursor: pointer;
             text-decoration: none;
+            font-size: 1.1rem;
+            transition: transform 0.1s, box-shadow 0.1s;
         }
-
         .btn-primary {
             background: var(--orange);
             color: var(--black);
             box-shadow: var(--shadow-lg);
-            font-size: 1.05rem;
-            padding: 16px 36px;
         }
-
-        .logo-strip-simple {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .logo-strip-simple span {
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            white-space: nowrap;
+        .btn-primary:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: var(--shadow-xl);
+            text-decoration: none;
         }
 
         /* ============================================================
-           VARIANT A — Split + Card Offer
+           VARIANT A — Clean: Marquee + Full Viewport + Air
            ============================================================ */
         .hero-a {
-            padding: 80px 0 64px;
+            min-height: calc(100vh - 56px - 42px);
+            display: flex;
+            align-items: center;
             background: var(--bg);
             border-bottom: var(--border);
             position: relative;
             overflow: hidden;
         }
-
         .hero-a::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background-image: radial-gradient(var(--black) 1px, transparent 1px);
-            background-size: 32px 32px;
-            opacity: 0.04;
+            background-size: 40px 40px;
+            opacity: 0.03;
             pointer-events: none;
         }
-
-        .hero-a .container {
-            max-width: 900px;
+        .hero-a-inner {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 80px 40px;
             position: relative;
             z-index: 1;
+            width: 100%;
         }
-
-        .hero-a-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        .hero-a-left .section-label {
+        .hero-a .section-label {
             font-family: var(--font-display);
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             color: var(--text-muted);
-            margin-bottom: 12px;
+            margin-bottom: 20px;
         }
-
-        .hero-a-left h1 {
-            font-size: clamp(2.2rem, 5.5vw, 3.5rem);
-            margin-bottom: 0;
+        .hero-a h1 {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            max-width: 780px;
+            margin-bottom: 24px;
         }
-
-        .hero-a-card {
-            background: var(--white);
-            border: var(--border-thick);
-            box-shadow: var(--shadow-xl);
-            padding: 36px 32px;
-        }
-
-        .hero-a-card .subtitle {
-            font-size: 1.05rem;
+        .hero-a .subtitle {
+            font-size: 1.15rem;
             color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 28px;
+            line-height: 1.65;
+            max-width: 520px;
+            margin-bottom: 44px;
         }
-
-        .hero-a-card .btn-primary {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 10px;
+        .hero-a .cta-row {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
         }
-
-        .hero-a-card .cta-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            opacity: 0.7;
-            margin-bottom: 0;
-        }
-
-        .hero-a-social {
-            margin-top: 28px;
-            padding-top: 20px;
-            border-top: var(--border);
-        }
-
-        .hero-a-social p {
+        .hero-a .cta-sub {
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 12px;
+            opacity: 0.6;
+            max-width: 240px;
+            line-height: 1.5;
         }
 
         /* ============================================================
-           VARIANT B — Black Strip + Left Align + Oversized Number
+           VARIANT B — Graph: Marquee + Full Viewport + Agent Network
            ============================================================ */
-        .hero-b-strip {
-            background: var(--black);
-            padding: 14px 0;
-            border-bottom: var(--border);
-        }
-
-        .hero-b-strip .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .hero-b-strip .logo-strip-dark {
-            display: flex;
-            gap: 28px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .hero-b-strip .logo-strip-dark span {
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.7);
-            white-space: nowrap;
-            letter-spacing: 0.02em;
-        }
-
-        .hero-b-strip .strip-lead {
-            font-family: var(--font-body);
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.4);
-            white-space: nowrap;
-        }
-
         .hero-b {
-            padding: 72px 0 64px;
+            min-height: calc(100vh - 56px - 42px);
+            display: flex;
+            align-items: center;
             background: var(--bg);
             border-bottom: var(--border);
             position: relative;
             overflow: hidden;
         }
-
         .hero-b::before {
             content: '';
             position: absolute;
-            top: -40px;
-            right: -40px;
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 16rem;
-            color: var(--black);
-            opacity: 0.04;
-            line-height: 1;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(var(--black) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.03;
             pointer-events: none;
-            content: '200+';
         }
-
-        .hero-b .container {
-            max-width: 900px;
+        .hero-b-inner {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 80px 40px;
             position: relative;
             z-index: 1;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
         }
-
-        .hero-b .section-label {
+        .hero-b-text .section-label {
             font-family: var(--font-display);
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
-        .hero-b h1 {
-            font-size: clamp(2.2rem, 5.5vw, 3.5rem);
             margin-bottom: 20px;
-            max-width: 680px;
         }
-
-        .hero-b .subtitle {
-            font-size: 1.05rem;
+        .hero-b-text h1 {
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
+            margin-bottom: 24px;
+        }
+        .hero-b-text .subtitle {
+            font-size: 1.1rem;
             color: var(--text-muted);
-            line-height: 1.6;
-            max-width: 540px;
-            margin-bottom: 36px;
+            line-height: 1.65;
+            margin-bottom: 40px;
+        }
+        .hero-b-text .cta-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.6;
+            margin-top: 14px;
         }
 
-        .hero-b .cta-row {
+        /* Agent Graph */
+        .agent-graph {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            max-width: 440px;
+            justify-self: center;
+        }
+
+        .graph-node {
+            position: absolute;
+            border: var(--border-thick);
             display: flex;
             align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 0;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            z-index: 2;
         }
 
-        .hero-b .cta-sub {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            opacity: 0.7;
+        /* Central hub */
+        .node-hub {
+            width: 100px;
+            height: 100px;
+            background: var(--orange);
+            box-shadow: var(--shadow-lg);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+        }
+
+        /* Satellite nodes */
+        .node-sat {
+            width: 64px;
+            height: 64px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .node-sat-1 { top: 4%; left: 20%; }
+        .node-sat-2 { top: 8%; right: 12%; background: var(--blue-light); }
+        .node-sat-3 { top: 40%; right: 2%; background: var(--orange-light); }
+        .node-sat-4 { bottom: 8%; right: 16%; }
+        .node-sat-5 { bottom: 4%; left: 16%; background: var(--blue-light); }
+        .node-sat-6 { top: 38%; left: 0%; background: var(--orange-light); }
+
+        /* Connector lines via SVG */
+        .graph-lines {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .graph-lines line {
+            stroke: var(--black);
+            stroke-width: 2;
+        }
+
+        /* Pulsing dot */
+        .pulse-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--orange);
+            border: 2px solid var(--black);
+            z-index: 3;
+            animation: pulse-move 4s ease-in-out infinite;
+        }
+        .pulse-dot-2 {
+            animation: pulse-move-2 5s ease-in-out infinite 1s;
+        }
+
+        @keyframes pulse-move {
+            0%, 100% { top: 8%; left: 35%; }
+            25% { top: 30%; left: 50%; }
+            50% { top: 50%; left: 50%; }
+            75% { top: 70%; left: 35%; }
+        }
+        @keyframes pulse-move-2 {
+            0%, 100% { top: 12%; right: 25%; left: auto; }
+            33% { top: 45%; right: 15%; left: auto; }
+            66% { top: 50%; right: 40%; left: auto; }
         }
 
         /* ===== Responsive ===== */
-        @media (min-width: 768px) {
-            .hero-a-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 48px;
+        @media (max-width: 768px) {
+            .hero-a-inner,
+            .nav-inner {
+                padding: 60px 20px;
+            }
+            .nav-inner { padding: 0 20px; }
+
+            .hero-a h1 {
+                font-size: clamp(2.2rem, 8vw, 3rem);
             }
 
-            .hero-b h1 {
-                font-size: clamp(2.5rem, 5.5vw, 3.5rem);
+            .hero-b-inner {
+                grid-template-columns: 1fr;
+                padding: 60px 20px;
+            }
+
+            .agent-graph {
+                max-width: 300px;
+                order: -1;
+            }
+
+            .hero-b-text h1 {
+                font-size: clamp(2.2rem, 8vw, 3rem);
+            }
+
+            .hero-a .cta-row,
+            .hero-b-text .cta-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -350,76 +399,116 @@
 <body>
 
 <!-- ============================================================ -->
-<div class="variant-label"><span>A</span> — Split Layout + Card Offer</div>
+<div class="variant-label"><span>A</span> — Clean: Full Viewport + Air</div>
 <!-- ============================================================ -->
 
 <div class="nav">
-    <div class="container">
+    <div class="nav-inner">
         <div class="logo"><em>F</em>ORGE</div>
         <a href="#" class="nav-cta">Получить план</a>
+    </div>
+</div>
+
+<div class="marquee-strip">
+    <div class="marquee-track">
+        <span>Альфа-Банк</span><span class="sep">///</span>
+        <span>М.Видео</span><span class="sep">///</span>
+        <span>Норникель</span><span class="sep">///</span>
+        <span>КХЛ</span><span class="sep">///</span>
+        <span>Магнит</span><span class="sep">///</span>
+        <span>Teachbase</span><span class="sep">///</span>
+        <span>7 лет в разработке</span><span class="sep">///</span>
+        <span>200+ проектов</span><span class="sep">///</span>
+        <!-- Duplicate for seamless loop -->
+        <span>Альфа-Банк</span><span class="sep">///</span>
+        <span>М.Видео</span><span class="sep">///</span>
+        <span>Норникель</span><span class="sep">///</span>
+        <span>КХЛ</span><span class="sep">///</span>
+        <span>Магнит</span><span class="sep">///</span>
+        <span>Teachbase</span><span class="sep">///</span>
+        <span>7 лет в разработке</span><span class="sep">///</span>
+        <span>200+ проектов</span><span class="sep">///</span>
     </div>
 </div>
 
 <section class="hero-a">
-    <div class="container">
-        <div class="hero-a-grid">
-            <div class="hero-a-left">
-                <p class="section-label">Внедрение AI в бизнес</p>
-                <h1>Ваша команда тратит часы на работу, которую можно не делать</h1>
-            </div>
-            <div class="hero-a-card">
-                <p class="subtitle">Убираем рутину и добавляем возможности, которых раньше не было — с помощью AI. 2-4 недели, фикс-прайс.</p>
-                <a href="#" class="btn btn-primary">Получить план внедрения AI — бесплатно</a>
-                <p class="cta-sub">30-минутный разбор ваших процессов. Покажем, где AI даст максимальный эффект.</p>
-                <div class="hero-a-social">
-                    <p>7 лет в разработке. 200+ проектов. В портфолио:</p>
-                    <div class="logo-strip-simple">
-                        <span>Альфа-Банк</span>
-                        <span>М.Видео</span>
-                        <span>Норникель</span>
-                        <span>КХЛ</span>
-                        <span>Магнит</span>
-                        <span>Teachbase</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================================ -->
-<div class="variant-label"><span>B</span> — Black Trust Strip + Left Align + Oversized Number</div>
-<!-- ============================================================ -->
-
-<div class="nav">
-    <div class="container">
-        <div class="logo"><em>F</em>ORGE</div>
-        <a href="#" class="nav-cta">Получить план</a>
-    </div>
-</div>
-
-<div class="hero-b-strip">
-    <div class="container">
-        <div class="logo-strip-dark">
-            <span class="strip-lead">7 лет, 200+ проектов:</span>
-            <span>Альфа-Банк</span>
-            <span>М.Видео</span>
-            <span>Норникель</span>
-            <span>КХЛ</span>
-            <span>Магнит</span>
-            <span>Teachbase</span>
-        </div>
-    </div>
-</div>
-
-<section class="hero-b">
-    <div class="container">
+    <div class="hero-a-inner">
         <p class="section-label">Внедрение AI в бизнес</p>
         <h1>Ваша команда тратит часы на работу, которую можно не делать</h1>
         <p class="subtitle">Убираем рутину и добавляем возможности, которых раньше не было — с помощью AI. 2-4 недели, фикс-прайс.</p>
         <div class="cta-row">
             <a href="#" class="btn btn-primary">Получить план внедрения AI — бесплатно</a>
-            <span class="cta-sub">30-минутный разбор ваших процессов.<br>Покажем, где AI даст максимальный эффект.</span>
+            <span class="cta-sub">30-минутный разбор ваших процессов. Покажем, где AI даст максимальный эффект.</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<div class="variant-label"><span>B</span> — Graph: Full Viewport + Agent Network</div>
+<!-- ============================================================ -->
+
+<div class="nav">
+    <div class="nav-inner">
+        <div class="logo"><em>F</em>ORGE</div>
+        <a href="#" class="nav-cta">Получить план</a>
+    </div>
+</div>
+
+<div class="marquee-strip">
+    <div class="marquee-track">
+        <span>Альфа-Банк</span><span class="sep">///</span>
+        <span>М.Видео</span><span class="sep">///</span>
+        <span>Норникель</span><span class="sep">///</span>
+        <span>КХЛ</span><span class="sep">///</span>
+        <span>Магнит</span><span class="sep">///</span>
+        <span>Teachbase</span><span class="sep">///</span>
+        <span>7 лет в разработке</span><span class="sep">///</span>
+        <span>200+ проектов</span><span class="sep">///</span>
+        <span>Альфа-Банк</span><span class="sep">///</span>
+        <span>М.Видео</span><span class="sep">///</span>
+        <span>Норникель</span><span class="sep">///</span>
+        <span>КХЛ</span><span class="sep">///</span>
+        <span>Магнит</span><span class="sep">///</span>
+        <span>Teachbase</span><span class="sep">///</span>
+        <span>7 лет в разработке</span><span class="sep">///</span>
+        <span>200+ проектов</span><span class="sep">///</span>
+    </div>
+</div>
+
+<section class="hero-b">
+    <div class="hero-b-inner">
+        <div class="hero-b-text">
+            <p class="section-label">Внедрение AI в бизнес</p>
+            <h1>Ваша команда тратит часы на работу, которую можно не делать</h1>
+            <p class="subtitle">Убираем рутину и добавляем возможности, которых раньше не было — с помощью AI. 2-4 недели, фикс-прайс.</p>
+            <a href="#" class="btn btn-primary">Получить план внедрения AI — бесплатно</a>
+            <p class="cta-sub">30-минутный разбор ваших процессов. Покажем, где AI даст максимальный эффект.</p>
+        </div>
+        <div class="agent-graph">
+            <!-- Connector lines -->
+            <svg class="graph-lines" viewBox="0 0 440 440" fill="none">
+                <line x1="120" y1="36" x2="210" y2="190" />
+                <line x1="340" y1="56" x2="230" y2="190" />
+                <line x1="400" y1="196" x2="260" y2="216" />
+                <line x1="330" y1="380" x2="240" y2="240" />
+                <line x1="100" y1="400" x2="200" y2="240" />
+                <line x1="30" y1="190" x2="190" y2="210" />
+                <!-- Cross connections -->
+                <line x1="120" y1="36" x2="340" y2="56" opacity="0.15" />
+                <line x1="100" y1="400" x2="330" y2="380" opacity="0.15" />
+            </svg>
+            <!-- Pulse dots -->
+            <div class="pulse-dot"></div>
+            <div class="pulse-dot pulse-dot-2"></div>
+            <!-- Hub -->
+            <div class="graph-node node-hub">AI</div>
+            <!-- Satellites -->
+            <div class="graph-node node-sat node-sat-1"></div>
+            <div class="graph-node node-sat node-sat-2"></div>
+            <div class="graph-node node-sat node-sat-3"></div>
+            <div class="graph-node node-sat node-sat-4"></div>
+            <div class="graph-node node-sat node-sat-5"></div>
+            <div class="graph-node node-sat node-sat-6"></div>
         </div>
     </div>
 </section>
