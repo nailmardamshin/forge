@@ -214,8 +214,8 @@ nav .container {
 }
 
 @media (max-width: 640px) {
-  .burger { display: flex; }
-  .nav-cta { display: none; }
+
+
 }
 
 .nav-cta {
@@ -1463,4 +1463,11 @@ footer {
   }
   .guarantees-grid { grid-template-columns: repeat(2, 1fr); }
   .competitor-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Nav right group */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
