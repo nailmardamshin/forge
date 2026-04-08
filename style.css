@@ -95,8 +95,8 @@ p:last-child { margin-bottom: 0; }
 }
 
 .btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: none;
+  transform: translate(2px, 2px) !important;
+  box-shadow: none !important;
   transition-duration: 0.05s;
 }
 
@@ -999,7 +999,6 @@ footer {
   .fade-in.visible .step {
     opacity: 1 !important; transform: none !important; animation: none !important;
   }
-  .point-b { transform: none !important; opacity: 1 !important; }
   .step:not(:last-child)::after { transform: none !important; animation: none !important; }
   .hero .section-label,
   .hero h1,
@@ -1046,16 +1045,13 @@ footer {
   }
 }
 
-/* Point B entrance — separate observer in JS for later trigger */
-.point-b {
-  transform: scale(0.96);
-  opacity: 0;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
-}
+/* Point B entrance — styles set via JS to avoid noscript issues */
 
-.point-b.visible {
-  transform: scale(1);
-  opacity: 1;
+/* Stack-strip stagger */
+.fade-in.visible .stack-strip span {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: stagger-in 0.3s ease forwards;
 }
 
 /* Timeline connector draw */
@@ -1125,9 +1121,18 @@ footer {
   font-size: 14rem;
   line-height: 1;
   color: var(--orange);
-  opacity: 0.05;
+  opacity: 0;
+  transform: translateY(10px);
   pointer-events: none;
   letter-spacing: -0.04em;
+  animation: ai-fade 0.8s ease forwards 0.7s;
+}
+
+@keyframes ai-fade {
+  to {
+    opacity: 0.05;
+    transform: translateY(0);
+  }
 }
 
 /* ===== Mobile trigger card reorder (alternate colors) ===== */
@@ -1135,7 +1140,7 @@ footer {
   .trigger-grid { display: flex; flex-direction: column; }
   .trigger-card:nth-child(4) { order: 5; }
   .trigger-card:nth-child(5) { order: 4; }
-  .hero-inner::after { display: none; }
+  .hero-inner::after { font-size: 6rem; right: 10px; bottom: 5%; }
 }
 
 /* ===== Mobile table → cards ===== */

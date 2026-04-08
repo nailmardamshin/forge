@@ -149,19 +149,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // === Point B entrance — own observer with high threshold ===
-  const pointB = document.querySelector('.point-b');
-  if (pointB) {
-    const pbObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          pbObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.4 });
-    pbObserver.observe(pointB);
+  // === Scroll-triggered entrances (Point B, Final CTA) ===
+  if (!prefersReducedMotion) {
+    function observeEntrance(selector, opts) {
+      const el = document.querySelector(selector);
+      if (!el) return;
+      el.style.opacity = '0';
+      el.style.transform = opts.from;
+      el.style.transition = opts.transition;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'none';
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: opts.threshold || 0.3 });
+      obs.observe(el);
+    }
+
+    observeEntrance('.point-b', {
+      from: 'scale(0.96)',
+      transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease',
+      threshold: 0.4
+    });
+
+    observeEntrance('.final-cta', {
+      from: 'translateY(24px)',
+      transition: 'opacity 0.6s ease, transform 0.6s ease',
+      threshold: 0.2
+    });
   }
+
+  // === Stack-strip stagger delays ===
+  document.querySelectorAll('.stack-strip span').forEach((span, i) => {
+    span.style.animationDelay = (i * 0.03) + 's';
+  });
 
   // === Nav shadow on scroll ===
   const navEl = document.querySelector('nav');
