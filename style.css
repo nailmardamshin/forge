@@ -121,11 +121,11 @@ nav {
   top: 0;
   background: var(--bg);
   z-index: 100;
-  transition: padding 0.25s ease;
+  transition: box-shadow 0.15s ease;
 }
 
 nav.nav-scrolled {
-  padding: 10px 0;
+  box-shadow: var(--shadow-sm);
 }
 
 nav .container {
