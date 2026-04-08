@@ -820,12 +820,33 @@ section:nth-child(even) .section-label {
 }
 
 /* ===== About ===== */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.about-photo img {
+  width: 200px;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-lg);
+  display: block;
+}
+
 .about-content {
   max-width: 660px;
   font-size: var(--text-base);
   line-height: 1.7;
   border-left: 6px solid var(--orange);
   padding-left: 24px;
+}
+
+@media (min-width: 640px) {
+  .about-grid {
+    grid-template-columns: 200px 1fr;
+    gap: 32px;
+  }
 }
 
 .about-content p {
