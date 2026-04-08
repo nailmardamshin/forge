@@ -495,25 +495,20 @@ section:nth-child(even) .section-label {
 
 .job-card:last-child { border-bottom: none; }
 
-.job-card:nth-child(even) .job-number {
-  background: var(--black);
-  color: var(--orange);
-}
-
 .job-number {
   display: flex;
   align-items: center;
   justify-content: center;
   width: auto;
   height: auto;
-  background: var(--orange);
+  background: var(--white);
   border: none;
   border-right: var(--border-thick);
   box-shadow: none;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.75rem;
-  color: var(--black);
+  color: var(--orange);
   margin-bottom: 0;
   padding: 20px 0;
 }
