@@ -479,38 +479,47 @@ section:nth-child(even) .section-label {
   display: flex;
   flex-direction: column;
   gap: 0;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-lg);
 }
 
 .job-card {
   display: grid;
-  grid-template-columns: 56px 1fr;
-  gap: 20px;
-  align-items: start;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 28px 0;
-  border-bottom: var(--border);
-  position: relative;
+  grid-template-columns: 72px 1fr;
+  gap: 0;
+  align-items: stretch;
+  background: var(--white);
+  border-bottom: var(--border-thick);
+  padding: 0;
 }
 
 .job-card:last-child { border-bottom: none; }
+
+.job-card:nth-child(even) .job-number {
+  background: var(--black);
+  color: var(--orange);
+}
 
 .job-number {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: transparent;
+  width: auto;
+  height: auto;
+  background: var(--orange);
   border: none;
+  border-right: var(--border-thick);
   box-shadow: none;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 2.5rem;
-  color: var(--orange);
+  font-size: 1.75rem;
+  color: var(--black);
   margin-bottom: 0;
-  line-height: 1;
+  padding: 20px 0;
+}
+
+.job-card > div:last-child {
+  padding: 20px 24px;
 }
 
 /* ===== Point B ===== */
