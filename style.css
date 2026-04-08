@@ -867,10 +867,11 @@ section:nth-child(even) .section-label {
 }
 
 .logo-strip-dark img {
-  height: 28px;
+  height: 24px;
   width: auto;
-  filter: brightness(0);
-  opacity: 0.6;
+  filter: grayscale(1);
+  opacity: 0.5;
+  mix-blend-mode: multiply;
 }
 
 .stack-strip {
