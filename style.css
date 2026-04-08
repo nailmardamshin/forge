@@ -921,6 +921,13 @@ footer {
 }
 
 
+/* ===== Mobile trigger card reorder (alternate colors) ===== */
+@media (max-width: 640px) {
+  .trigger-grid { display: flex; flex-direction: column; }
+  .trigger-card:nth-child(3) { order: 4; }
+  .trigger-card:nth-child(4) { order: 3; }
+}
+
 /* ===== Mobile table → cards ===== */
 @media (max-width: 640px) {
   .aha-table-wrap {
