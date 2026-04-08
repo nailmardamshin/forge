@@ -790,6 +790,11 @@ footer {
 }
 
 /* ===== Animations ===== */
+/* Fallback: if JS fails or motion reduced, show content */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1 !important; transform: none !important; }
+}
+
 .fade-in {
   opacity: 0;
   transform: translateY(24px);
