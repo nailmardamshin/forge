@@ -208,7 +208,7 @@ section:nth-child(even) {
 .hero-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 40px 40px;
+  padding: 44px 40px 40px;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -268,13 +268,13 @@ section:nth-child(even) {
   background: var(--black);
   border-bottom: var(--border);
   overflow: hidden;
-  padding: 20px 0;
+  padding: 28px 0;
   flex-shrink: 0;
 }
 
 .marquee-track {
   display: flex;
-  gap: 52px;
+  gap: 56px;
   align-items: center;
   animation: marquee 30s linear infinite;
   width: max-content;
@@ -283,23 +283,23 @@ section:nth-child(even) {
 .marquee-track span {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   color: rgba(255,255,255,0.5);
   white-space: nowrap;
 }
 
 .marquee-track .marquee-highlight {
   color: var(--orange);
-  font-size: 1.15rem;
+  font-size: 1.3rem;
 }
 
 .marquee-track .sep {
   color: rgba(255,255,255,0.15);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 .marquee-logo {
-  height: 36px;
+  height: 48px;
   width: auto;
   opacity: 0.8;
   flex-shrink: 0;
