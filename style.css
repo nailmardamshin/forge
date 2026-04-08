@@ -87,6 +87,7 @@ p:last-child { margin-bottom: 0; }
   cursor: pointer;
   transition: transform 0.1s, box-shadow 0.1s;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn:hover {
@@ -754,6 +755,16 @@ section:nth-child(even) .section-label {
   margin-bottom: 12px;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
+}
+
+.barrier-q,
+.nav-cta {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.barrier-q:active {
+  transform: translate(1px, 1px);
+  transition-duration: 0.05s;
 }
 
 .barrier-q {
