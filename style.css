@@ -973,9 +973,8 @@ footer {
 
 @media (min-width: 1024px) {
   .trigger-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
-  .trigger-card:nth-child(1) { grid-column: span 2; }
   .trigger-card:nth-child(5) { grid-column: span 2; }
 
   /* Steps — horizontal with connector line */
