@@ -116,7 +116,7 @@ p:last-child { margin-bottom: 0; }
 .btn-secondary:hover { box-shadow: var(--shadow-lg); }
 
 /* ===== Nav ===== */
-nav {
+body > nav {
   padding: 16px 0;
   padding-top: calc(16px + env(safe-area-inset-top, 0px));
   border-bottom: var(--border);
@@ -127,11 +127,11 @@ nav {
   transition: box-shadow 0.15s ease;
 }
 
-nav.nav-scrolled {
+body > nav.nav-scrolled {
   box-shadow: var(--shadow-sm);
 }
 
-nav .container {
+body > nav .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
