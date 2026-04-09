@@ -275,8 +275,9 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
     });
 
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
+    // Close mobile menu when clicking any link OR the form CTA button
+    mobileMenu.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('click', () => {
         burger.classList.remove('active');
         mobileMenu.classList.remove('active');
         document.body.style.overflow = '';

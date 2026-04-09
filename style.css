@@ -267,6 +267,16 @@ nav .container {
   border: var(--border);
   box-shadow: var(--shadow-sm);
   transition: transform 0.1s, box-shadow 0.1s;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+button.nav-cta,
+button.mobile-menu-cta,
+button.btn {
+  font-family: var(--font-display);
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .nav-cta:hover {

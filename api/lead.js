@@ -15,7 +15,7 @@ function escapeHtml(str = '') {
 }
 
 function validateSource(src) {
-  const allowed = ['hero', 'final-cta', 'footer', 'modal'];
+  const allowed = ['hero', 'final-cta', 'footer', 'modal', 'nav', 'mobile-menu'];
   return allowed.includes(src) ? src : 'modal';
 }
 
@@ -71,7 +71,8 @@ export default async function handler(req, res) {
                 Task: task,
                 Source: source,
                 Status: 'New'
-              }
+              },
+              typecast: true
             })
           }
         );
