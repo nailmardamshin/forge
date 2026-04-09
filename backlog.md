@@ -1,6 +1,6 @@
 # Forge Landing — Backlog
 
-> Последнее обновление: 09.04.2026
+> Последнее обновление: 09.04.2026 — анимации, форма, тексты, реорганизация
 
 ## Pending
 
@@ -64,3 +64,53 @@
 - [x] og-template.html + OG-image с тёмной полосой и enterprise логотипами
 - [x] Фавиконки
 - [x] Мета-теги (title, description, og:*)
+- [x] JSON-LD structured data (Organization + Service)
+
+### Анимации и интерактив
+- [x] Hero entrance stagger (label → h1 → subtitle → cta, delay 0.15-0.75s)
+- [x] CTA shadow pulse (hero + final) — 2 повтора
+- [x] Decorative "AI" в hero-inner::after (14rem на десктопе, 7rem на мобилке, opacity 0.07)
+- [x] Scroll fade-in всех секций, threshold 0.25, duration 0.8s
+- [x] Staggered children — карточки, строки таблицы, job-cards, stack-strip пунктиры
+- [x] Counter animation для цифр в кейсах (94%, 7 000, 24K+, 274, -25%), easeOutExpo 2s
+- [x] Timeline draw — connector lines «рисуются» scaleX/scaleY, стаггер per step
+- [x] Point B entrance — scale(0.96)→1 + opacity, свой observer threshold 0.4
+- [x] Marquee — hover slow 0.5x, momentum после drag, prefers-reduced-motion
+- [x] Accordion — smooth scrollHeight вместо max-height hack, recalc на resize
+- [x] Nav shadow при скролле (zero-blur sm shadow)
+- [x] Job-card hover — translateX(4px) с !important
+- [x] Декоративные символы в trigger cards (↗ ? ! # »), guarantees (₽ ⇄ </> 30), point-b (◆)
+- [x] Active state (0.05s transition) + tap feedback на мобилке (webkit-tap-highlight transparent)
+- [x] prefers-reduced-motion — отключает все анимации, counter показывает финал сразу
+
+### Форма и лиды
+- [x] Модалка с формой (4 поля: имя, компания, контакт, задача опционально)
+- [x] Стили neobrutalism — чёрные рамки, жёсткие тени, square corners
+- [x] Красный border для пустых обязательных / зелёный для заполненных (placeholder-shown трюк)
+- [x] Лейбл синхронизирован с цветом поля (красный/зелёный/чёрный)
+- [x] Orange focus shadow / green shadow для валидных полей
+- [x] Оранжевый крестик закрытия
+- [x] Success state — вся форма исчезает, большая галочка «Отправлено!», autoclose через 6s
+- [x] Escape / клик по backdrop закрывают модалку
+- [x] Body scroll lock при открытии
+- [x] Validation на клиенте + на сервере (allowlist sources)
+- [x] Airtable typecast: true — автосоздание новых Source опций
+- [x] Cache buster на main.js (критичный фикс — без него JS кешировался)
+
+### CTAs
+- [x] Все primary CTAs → форма (hero, nav, mobile-menu, final-cta)
+- [x] Telegram остался только вторичной кнопкой в final-cta + footer ссылка
+- [x] Final CTA reorder: form (primary) → telegram (secondary) — как в landing-copy.md
+- [x] Button reset CSS для <button> с классами .btn / .nav-cta / .mobile-menu-cta
+- [x] Mobile menu закрывается при клике на форм-кнопку
+
+### Тексты (по changelog 2026-04-09)
+- [x] «2-4 недели» → «3-4 недели» (6 мест + meta + JSON-LD)
+- [x] «30 минут» → «60 минут» (3 места)
+- [x] «проприетарная платформа» → «закрытая платформа, которую знаем только мы»
+- [x] «core business» → «профиль», «n8n» → «собственные пилоты» (секция 8)
+- [x] Убрана фраза «работаете напрямую с командой» (секция 8, карточка 3)
+
+### Мелочи
+- [x] safe-area-inset-top для Telegram in-app браузера (нав прилипает к верхней грани)
+- [x] Vertical border между колонками «Сейчас» и «После AI» в таблице (блок 2)
