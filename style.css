@@ -1159,24 +1159,40 @@ footer a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
+}
+.footer-brand {
+  font-size: var(--text-xs);
+  color: #999;
 }
 .footer-legal {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 8px 10px;
-  font-size: var(--text-xs);
+  gap: 6px 14px;
+  font-size: 11px;
+}
+.footer-legal a {
+  color: #777;
+  text-decoration: none;
+  border-bottom: 1px dotted #555;
+  padding-bottom: 1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.footer-legal a:hover {
+  color: var(--orange);
+  border-bottom-color: var(--orange);
 }
 .footer-legal .footer-sep {
-  color: #555;
+  color: #444;
+  font-size: 9px;
 }
 @media (max-width: 480px) {
   .footer-legal .footer-sep { display: none; }
   .footer-legal {
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
   }
 }
 
@@ -1809,15 +1825,16 @@ footer a:hover {
   pointer-events: none;
 }
 
-/* ===== Consent checkbox ===== */
+/* ===== Consent checkbox (neobrutalism) ===== */
 .form-consent {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   cursor: pointer;
   padding: 4px 0 0;
   margin-top: 4px;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .form-consent input[type="checkbox"] {
   position: absolute;
@@ -1828,13 +1845,23 @@ footer a:hover {
 }
 .form-consent .consent-box {
   flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--black);
+  width: 22px;
+  height: 22px;
+  border: var(--border-thick);
   background: var(--white);
+  box-shadow: var(--shadow-sm);
   position: relative;
   margin-top: 2px;
-  transition: background 0.12s ease;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.12s ease;
+}
+.form-consent:hover .consent-box {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow);
+}
+.form-consent:active .consent-box {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+  transition-duration: 0.05s;
 }
 .form-consent input[type="checkbox"]:checked + .consent-box {
   background: var(--orange);
@@ -1844,18 +1871,23 @@ footer a:hover {
   position: absolute;
   left: 5px;
   top: 1px;
-  width: 5px;
-  height: 10px;
-  border: solid var(--white);
-  border-width: 0 2px 2px 0;
+  width: 6px;
+  height: 12px;
+  border: solid var(--black);
+  border-width: 0 3px 3px 0;
   transform: rotate(45deg);
 }
 .form-consent input[type="checkbox"]:focus-visible + .consent-box {
   outline: 2px solid var(--orange);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
+/* Consent text — override .lead-form label span (uppercase/bold/display font) */
 .form-consent .consent-text {
-  font-size: 13px;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
   line-height: 1.5;
   color: var(--text-muted);
 }
@@ -1863,6 +1895,7 @@ footer a:hover {
   color: var(--orange);
   text-decoration: underline;
   text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
   font-weight: 600;
 }
 .form-consent .consent-text a:hover {
@@ -1870,7 +1903,7 @@ footer a:hover {
 }
 .form-consent.error .consent-box {
   border-color: #d33;
-  box-shadow: 0 0 0 2px #ffd5d5;
+  background: #ffe5e5;
 }
 
 .form-status {
