@@ -458,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Privacy Policy changes in a way that should re-prompt the user.
   // ===============================================================
 
-  const METRICA_COUNTER_ID = null; // TODO: replace with real counter ID (e.g. 12345678)
+  const METRICA_COUNTER_ID = 108474355;
   const CONSENT_KEY = 'forge_cookie_consent';
   const CONSENT_VERSION = '2025-10-15';
 
