@@ -35,6 +35,13 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {};
+
+    // Honeypot — invisible 'website' field. Humans never see it, bots fill it.
+    // Reject silently with 200 so bots don't retry or learn the signal.
+    if (body.website && String(body.website).trim().length > 0) {
+      return res.status(200).json({ ok: true });
+    }
+
     const name = String(body.name || '').trim().slice(0, 200);
     const company = String(body.company || '').trim().slice(0, 200);
     const contact = String(body.contact || '').trim().slice(0, 200);

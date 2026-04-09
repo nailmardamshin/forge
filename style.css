@@ -1793,6 +1793,17 @@ footer a:hover {
   gap: 16px;
 }
 
+/* Honeypot field — invisible to humans, bots fill it in */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .lead-form label {
   display: flex;
   flex-direction: column;
