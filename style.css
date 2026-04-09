@@ -1848,18 +1848,15 @@ footer a:hover {
   transform: translate(-1px, -1px);
 }
 
-/* Required empty → red border (obligatory indicator) */
-.lead-form input[type="text"][required]:placeholder-shown {
-  border-color: #d14;
-}
+/* Empty fields stay neutral (black border) — no aggressive red state.
+   Validation happens on submit via main.js. */
 
-/* Required filled → green border + green shadow */
+/* Filled + valid → green border + green shadow (positive reinforcement) */
 .lead-form input[type="text"][required]:not(:placeholder-shown):valid {
   border-color: #16a34a;
   box-shadow: 3px 3px 0 0 #16a34a;
 }
 
-/* Required filled + focused — green shadow stays */
 .lead-form input[type="text"][required]:not(:placeholder-shown):valid:focus {
   box-shadow: 5px 5px 0 0 #16a34a;
 }
@@ -1874,11 +1871,7 @@ footer a:hover {
   box-shadow: 5px 5px 0 0 #16a34a;
 }
 
-/* Label colors sync with field state */
-.lead-form label:has(input[required]:placeholder-shown) span {
-  color: #d14;
-}
-
+/* Label turns green only when field is correctly filled */
 .lead-form label:has(input[required]:not(:placeholder-shown):valid) span,
 .lead-form label:has(textarea:not(:placeholder-shown)) span {
   color: #16a34a;
