@@ -283,4 +283,105 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // === Lead modal ===
+  const modal = document.querySelector('#leadModal');
+  const leadForm = document.querySelector('#leadForm');
+  const formStatus = document.querySelector('#formStatus');
+
+  function openModal(source) {
+    if (!modal) return;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    if (leadForm) {
+      const sourceInput = leadForm.querySelector('input[name="source"]');
+      if (sourceInput) sourceInput.value = source || 'modal';
+    }
+    setTimeout(() => {
+      const first = leadForm?.querySelector('input[name="name"]');
+      if (first) first.focus();
+    }, 120);
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+
+  // Open triggers
+  document.querySelectorAll('[data-lead-modal]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal(btn.dataset.leadModal);
+    });
+  });
+
+  // Close triggers
+  if (modal) {
+    modal.querySelectorAll('[data-close]').forEach(el => {
+      el.addEventListener('click', closeModal);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) {
+        closeModal();
+      }
+    });
+  }
+
+  // Form submit
+  if (leadForm) {
+    leadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = leadForm.querySelector('.lead-submit');
+      const originalText = submitBtn.textContent;
+
+      // Client-side validation
+      const required = ['name', 'company', 'contact'];
+      for (const field of required) {
+        const input = leadForm.querySelector(`[name="${field}"]`);
+        if (!input.value.trim()) {
+          input.focus();
+          formStatus.className = 'form-status error';
+          formStatus.textContent = 'Заполните все обязательные поля';
+          return;
+        }
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Отправляем…';
+      formStatus.className = 'form-status';
+      formStatus.textContent = '';
+
+      const formData = new FormData(leadForm);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.error || 'Request failed');
+        }
+
+        formStatus.className = 'form-status success';
+        formStatus.textContent = '✓ Отправлено! Свяжемся с вами в течение дня.';
+        leadForm.reset();
+        setTimeout(closeModal, 2500);
+      } catch (error) {
+        console.error('Lead submission error:', error);
+        formStatus.className = 'form-status error';
+        formStatus.innerHTML = '✗ Не удалось отправить. Напишите в Telegram: <a href="https://t.me/nmardamshin">@nmardamshin</a>';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+  }
 });
