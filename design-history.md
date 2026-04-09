@@ -232,20 +232,79 @@ Soft neobrutalism. 12 секций. Container 900px. Mobile-first. Деплой 
 
 ### SEO и форма (09.04.2026)
 
+**Базовая инфраструктура (первый заход):**
 - Добавлены `robots.txt`, `sitemap.xml`, `og-template.html`, фавиконки
 - OG-image с тёмной полосой внизу и enterprise логотипами
 - Лид-форма модалка → `/api/lead` (Vercel function) → Airtable + Telegram notification
 - Валидация полей с зелёной/красной тенью
 - Секреты в Vercel Environment Variables (не в коде!)
 
+### SEO-пасс (09.04.2026, второй заход)
+
+Выполнено по промпту `Outputs/Prompts/forge-seo-markup.md`. Все изменения закоммичены и задеплоены на Vercel (`forge-six-blue.vercel.app`).
+
+**Meta-теги в `<head>`:**
+- `canonical`, `og:url`, `og:site_name`, `og:locale=ru_RU`
+- `og:image` (6 тегов: url/secure_url/type/width/height/alt) с cache buster `?v=1`
+- Twitter Card `summary_large_image` с title/description/image/alt
+- Mobile metas: `theme-color=#F97316`, `color-scheme`, `apple-mobile-web-app-*`, `format-detection`
+
+**Structured data (JSON-LD):**
+- **ProfessionalService** с `@id` для cross-linking, `slogan`, `serviceType` (4 категории), `contactPoint` (Telegram как sales), `parentOrganization` (Tetraform), `hasOfferCatalog` (4 услуги), `knowsAbout`, `founder`, `sameAs`
+- **FAQPage** — 5 вопросов из секции «Сомнения», тексты byte-exact match с DOM (требование Google для rich snippets)
+- **WebSite** — отдельный блок, `publisher` ссылается на ProfessionalService через `@id`
+- НЕ добавляли: `Organization` (дубль ProfessionalService), `BreadcrumbList` (не применимо на single-page), `Review`/`AggregateRating` (нет реальных отзывов)
+
+**Favicons:**
+- `favicon.svg` — оранжевая F на cream `#FFFDF5`, чёрная рамка (совпадает с `.logo` в CSS)
+- `favicon-32.png` + `apple-touch-icon.png` — PNG fallbacks сгенерированы через Pillow (геометрия без шрифтов для надёжности)
+
+**OG-image (несколько итераций):**
+1. v1: cream фон + faded grayscale логотипы → в Telegram preview логи нечитаемые
+2. v2: тёмная полоса внизу (160→170px) + белые логи в натуральном виде
+3. v3: убрала лейбл «НАМ ДОВЕРЯЮТ» (после downscale невидим), увеличила лого до 80px height, М.Видео override до max-width 260px
+4. v4: заменила English Норникель на русскую SVG-версию (см. ниже)
+5. Fix F в оранжевом квадрате: font-size 280→240, top 70→40, square 400→460 — появился воздух от нижней грани
+6. Рендер: `window-size=1200x720` → crop до `1200x630` через Pillow (Chrome headless quirk — при точном `1200x630` отрезает ~50px снизу)
+
+**Норникель на русском:**
+- `assets/logos/nornickel-ru.svg` — белый SVG с кириллическим «НОРНИКЕЛЬ»
+- Использованы оригинальные path-ы N-логотипа + SVG `<text>` с Inter/Arial Black fallback
+- Применяется в marquee (обе ссылки в `index.html`) и OG-картинке
+- `nornickel.svg` (английский белый) и `nornickel-ru.png` (цветной) остались в ассетах на всякий случай
+
+**A11y:**
+- `<main id="main-content">` оборачивает от hero до final-cta
+- `.skip-link` в начале body с focus-visible стилями
+- `@media (prefers-reduced-motion: reduce)` — глушит marquee animation, fade-in, все transitions
+
+**Performance:**
+- Inter 400 Cyrillic subset preload (Google Fonts v20 — URL может ротироваться, есть комментарий в коде)
+- `decoding="async"` на 24 marquee-лого + `photo_founder.jpg`
+- `loading="lazy"` на `photo_founder.jpg` (было)
+- Performance не ставили целью (Google Fonts съедают бюджет)
+
+**Validation:**
+- W3C HTML validator (через JSON API `validator.w3.org/nu/`) — **0 errors / 0 warnings** на live
+- JSON-LD парсится + все required поля присутствуют (проверено скриптом)
+- FAQ DOM-to-JSON-LD 5/5 byte-exact (Google примет rich snippets)
+- Lighthouse audit — пока не прогнан (требует ручной запуск в Chrome DevTools)
+
+**Что осталось SEO (после привязки кастомного домена):**
+- Глобально заменить `nailmardamshin.github.io/forge` → `новый-домен` в index.html / robots.txt / sitemap.xml
+- Google Search Console + Yandex Webmaster (требуют верификацию домена)
+- Lighthouse audit в Chrome DevTools (ручной прогон)
+- Analytics (GA4 / Я.Метрика) — отдельный спринт с cookie-banner и политикой ПДн
+
 ---
 
 ## Актуальные открытые вопросы (см. backlog.md)
 
-- Норникель SVG на русском (белый на прозрачном) — сейчас английский
 - Автоматическая загрузка аватара Telegram-группы через MTProto (ограничение: JSON long precision)
 - Section labels — глобальное решение pill vs ghost
 - Ломаная сетка (broken grid) для 2/8/9 — в бэклоге
+- Мобильная адаптация на 375px — полный проход по блокам
+- Lighthouse audit — ручной прогон для цели SEO≥95/A11y≥90
 
 ---
 
