@@ -31,14 +31,11 @@
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Inter 400 cyrillic subset — preload для быстрого FCP. URL из Google Fonts v20 (09.04.2026). Google ротирует версии, при 404 — обновить через DevTools Network → Fonts. -->
-    <link rel="preload" as="font" type="font/woff2"
-          href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7W0Q5n-wU.woff2"
-          crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=20260409_footer_nav_fix">
+    <!-- Self-hosted fonts (Inter cyrillic + latin, Space Grotesk latin 700) — убран Google Fonts render-blocking chain -->
+    <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-cyrillic.woff2" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-latin.woff2" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="assets/fonts/spacegrotesk-latin-700.woff2" crossorigin>
+    <link rel="stylesheet" href="style.css?v=20260409_p0_fixes">
     <noscript><style>.fade-in { opacity: 1 !important; transform: none !important; }</style></noscript>
     <script type="application/ld+json">
     {
@@ -581,7 +578,15 @@
         <h2><span style="color:var(--orange)">F</span>ORGE&nbsp;— внедрение AI в&nbsp;<span style="white-space:nowrap">бизнес-процессы</span></h2>
         <div class="about-grid">
             <div class="about-photo">
-                <img src="assets/images/photo_founder.jpg" alt="Наиль Мардамшин — основатель Forge" loading="lazy" decoding="async">
+                <picture>
+                    <source type="image/webp"
+                            srcset="assets/images/photo_founder-320.webp 320w, assets/images/photo_founder-640.webp 640w"
+                            sizes="(max-width: 768px) 320px, 640px">
+                    <img src="assets/images/photo_founder-640.jpg"
+                         alt="Наиль Мардамшин — основатель Forge"
+                         width="640" height="640"
+                         loading="lazy" decoding="async">
+                </picture>
             </div>
             <div class="about-content">
                 <p><strong>Основатель&nbsp;— Наиль Мардамшин,</strong> создатель digital-агентства Tetraform. 7&nbsp;лет в&nbsp;разработке, 200+&nbsp;проектов для Альфа-Банка, М.Видео, Норникеля, КХЛ и&nbsp;других. Тот&nbsp;же подход&nbsp;— исследование, проектирование, внедрение&nbsp;— но&nbsp;теперь с&nbsp;AI.</p>
