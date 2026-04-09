@@ -300,6 +300,15 @@ document.addEventListener('DOMContentLoaded', () => {
       formStatus.className = 'form-status';
       formStatus.textContent = '';
     }
+    // Reset submit button state (was stuck as disabled+"Отправляем…" after success)
+    const submitBtn = leadForm ? leadForm.querySelector('.lead-submit') : null;
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Отправить';
+    }
+    // Clear consent error state
+    const consentLabel = leadForm ? leadForm.querySelector('.form-consent') : null;
+    if (consentLabel) consentLabel.classList.remove('error');
   }
 
   function openModal(source) {
