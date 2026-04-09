@@ -1,11 +1,10 @@
 # Forge Landing — Backlog
 
-> Последнее обновление: 09.04.2026 — анимации, форма, тексты, реорганизация
+> Последнее обновление: 09.04.2026 — SEO-пасс (JSON-LD, favicons, OG, a11y)
 
 ## Pending
 
 ### Дизайн
-- [ ] Норникель — найти SVG на русском языке (белый на прозрачном) для marquee и блока 11
 - [ ] Section labels — решить глобально: pill или ghost (сейчас pill везде)
 - [ ] Ломаная сетка: расширить контейнер для таблицы (#2), кейсов (#9), альтернатив (#8)
 - [ ] Мобильная адаптация — полный проход по всем блокам на 375px
@@ -16,9 +15,10 @@
 - [ ] Форкнуть Telegram MCP и добавить high-level метод `upload_chat_photo(chat_id, file_path)` — сейчас автозагрузка аватара не работает из-за JSON long precision в params `invoke_mtproto`. Скилл `forge-tg-create` пока делает fallback «поставь вручную»
 
 ### SEO / аналитика
-- [ ] Google Search Console + Yandex Webmaster
-- [ ] Analytics (GA4 или Я.Метрика)
-- [ ] Schema.org structured data (Organization, WebPage, BreadcrumbList)
+- [ ] Google Search Console + Yandex Webmaster (после привязки домена)
+- [ ] Analytics (GA4 или Я.Метрика) — отдельный спринт с cookie-banner и политикой ПДн
+- [ ] Обновить canonical/og:url/sameAs на кастомный домен (сейчас github.io placeholder)
+- [ ] Lighthouse audit на live (SEO ≥ 95, A11y ≥ 90) — ручной прогон в Chrome DevTools
 
 ## Done
 
@@ -62,9 +62,15 @@
 - [x] robots.txt
 - [x] sitemap.xml
 - [x] og-template.html + OG-image с тёмной полосой и enterprise логотипами
-- [x] Фавиконки
-- [x] Мета-теги (title, description, og:*)
-- [x] JSON-LD structured data (Organization + Service)
+- [x] Фавиконки (SVG + PNG 32 + apple-touch-icon 180, оранжевая F на cream)
+- [x] Мета-теги (title, description, og:*, twitter card, canonical, theme-color, mobile)
+- [x] JSON-LD structured data: ProfessionalService + FAQPage + WebSite
+- [x] ProfessionalService enrichment: slogan, serviceType, contactPoint, parentOrganization, @id
+- [x] FAQPage answers byte-match DOM (rich snippets ready)
+- [x] a11y: main landmark, skip link, prefers-reduced-motion
+- [x] Inter 400 cyrillic preload, decoding="async" на marquee лого
+- [x] Норникель: белый SVG с кириллическим "НОРНИКЕЛЬ" для marquee
+- [x] W3C HTML validator: 0 errors / 0 warnings на live
 
 ### Анимации и интерактив
 - [x] Hero entrance stagger (label → h1 → subtitle → cta, delay 0.15-0.75s)
