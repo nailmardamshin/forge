@@ -622,6 +622,7 @@ section:nth-child(even) .section-label {
 .trigger-card h3 {
   font-size: var(--text-base);
   margin-bottom: 6px;
+  color: var(--orange);
 }
 
 .trigger-card p {
