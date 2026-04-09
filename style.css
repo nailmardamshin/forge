@@ -1209,10 +1209,10 @@ footer a {
   color: var(--orange);
   text-decoration: underline;
   text-underline-offset: 2px;
-  /* a11y: tap target — increased hit area via inline-block padding */
+  /* a11y: tap target ≥44px (WCAG 2.5.5) via negative-margin padding hack */
   display: inline-block;
-  padding: 8px 4px;
-  margin: -8px 0;
+  padding: 14px 4px;
+  margin: -14px 0;
 }
 footer a:hover {
   color: #fff;
