@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 14" preserveAspectRatio="xMinYMid meet">
+  <g fill="#ffffff">
+    <!-- N logo: inner triangle + two circles (from original nornickel.svg) -->
+    <path d="m13.494 4.736-6.615-4.471v8.757l6.615 4.472z"/>
+    <path d="m.265 6.88a6.617 6.617 0 0 0 6.614 6.614v-13.23a6.617 6.617 0 0 0 -6.614 6.616m13.229-6.615v13.229c3.651 0 6.614-2.964 6.614-6.615s-2.963-6.614-6.614-6.614"/>
+    <!-- НОРНИКЕЛЬ text -->
+    <text x="24" y="10.6"
+          font-family="'Inter', 'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+          font-weight="900"
+          font-size="8.2"
+          letter-spacing="-0.15">НОРНИКЕЛЬ</text>
+  </g>
+</svg>
