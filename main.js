@@ -308,9 +308,14 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
+    const resolvedSource = source || 'modal';
     if (leadForm) {
       const sourceInput = leadForm.querySelector('input[name="source"]');
-      if (sourceInput) sourceInput.value = source || 'modal';
+      if (sourceInput) sourceInput.value = resolvedSource;
+    }
+    // Metrica goal: user showed intent by opening the lead modal
+    if (typeof window.forgeTrackGoal === 'function') {
+      window.forgeTrackGoal('lead_modal_opened', { source: resolvedSource });
     }
     setTimeout(() => {
       const first = leadForm?.querySelector('input[name="name"]');
@@ -414,6 +419,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Success — replace form content with success block
         if (modalContent) modalContent.hidden = true;
         if (modalSuccess) modalSuccess.hidden = false;
+        // Metrica goal: actual conversion — lead successfully submitted to the backend
+        if (typeof window.forgeTrackGoal === 'function') {
+          window.forgeTrackGoal('lead_submitted', { source: data.source || 'modal' });
+        }
         // Auto-close after 6 seconds
         setTimeout(closeModal, 6000);
       } catch (error) {
@@ -461,6 +470,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const METRICA_COUNTER_ID = 108474355;
   const CONSENT_KEY = 'forge_cookie_consent';
   const CONSENT_VERSION = '2025-10-15';
+
+  // Goal tracker — safe no-op if Metrica is not loaded (no consent, blocked, etc.)
+  // Register matching goal IDs in Metrica UI: Настройки счётчика → Цели → JavaScript-событие
+  window.forgeTrackGoal = function(name, params) {
+    if (!METRICA_COUNTER_ID) return;
+    if (typeof window.ym !== 'function') return;
+    try {
+      if (params && Object.keys(params).length) {
+        window.ym(METRICA_COUNTER_ID, 'reachGoal', name, params);
+      } else {
+        window.ym(METRICA_COUNTER_ID, 'reachGoal', name);
+      }
+    } catch (e) {
+      console.warn('Metrica goal failed:', name, e);
+    }
+  };
 
   const cookieBanner = document.getElementById('cookieBanner');
   const cookieAcceptBtn = document.getElementById('cookieAccept');
@@ -567,4 +592,21 @@ document.addEventListener('DOMContentLoaded', () => {
       showBanner();
     });
   }
+
+  // Metrica goal: clicks on Telegram links anywhere on the page
+  // (nav, hero, modal, footer, case cards, etc.) — alternative conversion path.
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href*="t.me/"]');
+    if (!link) return;
+    if (typeof window.forgeTrackGoal === 'function') {
+      const href = link.getAttribute('href') || '';
+      // Detect which block the link lives in, for segmentation
+      let location = 'other';
+      if (link.closest('nav')) location = 'nav';
+      else if (link.closest('.modal')) location = 'modal';
+      else if (link.closest('footer')) location = 'footer';
+      else if (link.closest('.hero')) location = 'hero';
+      window.forgeTrackGoal('telegram_click', { href, location });
+    }
+  });
 });
