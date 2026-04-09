@@ -4,19 +4,17 @@
 
 ## Pending
 
-### Дизайн
-- [ ] Section labels — решить глобально: pill или ghost (сейчас pill везде)
-- [ ] Ломаная сетка: расширить контейнер для таблицы (#2), кейсов (#9), альтернатив (#8)
-- [ ] SVG логотипы клиентов вместо текста (где не найдены)
-- [ ] Микро-CTA под блоком "Узнаёте?" — "Если хоть одно — пора поговорить" + ссылка на аудит (opt)
-
-### Инфраструктура
-- [ ] Форкнуть Telegram MCP и добавить high-level метод `upload_chat_photo(chat_id, file_path)` — сейчас автозагрузка аватара не работает из-за JSON long precision в params `invoke_mtproto`. Скилл `forge-tg-create` пока делает fallback «поставь вручную»
-
 ### SEO / аналитика
 - [ ] Google Search Console + Yandex Webmaster (после привязки домена)
 - [ ] Analytics (GA4 или Я.Метрика) — отдельный спринт с cookie-banner и политикой ПДн
 - [ ] Обновить canonical/og:url/sameAs на кастомный домен (сейчас github.io placeholder)
+
+### Решено не делать
+- Section labels pill vs ghost — оставили pill глобально, hero исключение (ghost)
+- Ломаная сетка для блоков 2/8/9 — не актуально
+- SVG логотипы клиентов в блоке 11 — текстом достаточно, marquee закрывает потребность
+- Микро-CTA под "Узнаёте?" — не нужно, final-cta вытягивает
+- Telegram MCP fork для upload_chat_photo — workaround «поставь аватар вручную» устраивает
 
 ## Done
 
