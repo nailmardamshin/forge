@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Explicit proof-of-consent fields for legal audit (FZ-152)
       data.consent = true;
       data.consent_timestamp = new Date().toISOString();
-      data.consent_text_version = '2025-10-01';
+      data.consent_text_version = '2025-10-15';
 
       try {
         const response = await fetch('/api/lead', {
@@ -429,6 +429,142 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
       }
+    });
+  }
+
+  // ===============================================================
+  // Cookie consent + Yandex Metrica loader
+  // ===============================================================
+  //
+  // How it works:
+  //  - On load we check localStorage for a saved consent decision.
+  //  - If the user already accepted analytics (and the version matches
+  //    the current policy) — Metrica is loaded immediately.
+  //  - If no decision yet (or the policy version bumped) — we show the
+  //    cookie banner. Nothing is loaded until the user decides.
+  //  - Accept → save decision, load Metrica. Reject → save decision,
+  //    Metrica stays off. Footer "Управление cookies" re-opens the
+  //    banner so the user can change their mind.
+  //
+  // Metrica is loaded DYNAMICALLY only after consent — no tracking
+  // requests hit Yandex before the user agrees.
+  //
+  // To enable Metrica for real: set METRICA_COUNTER_ID to the real
+  // numeric ID (e.g. 12345678) once the counter is registered on
+  // metrika.yandex.ru. While it is null, the loader is a no-op and the
+  // banner still works — the user's decision is recorded for later.
+  //
+  // Bump CONSENT_VERSION whenever the cookies/Metrica section of the
+  // Privacy Policy changes in a way that should re-prompt the user.
+  // ===============================================================
+
+  const METRICA_COUNTER_ID = null; // TODO: replace with real counter ID (e.g. 12345678)
+  const CONSENT_KEY = 'forge_cookie_consent';
+  const CONSENT_VERSION = '2025-10-15';
+
+  const cookieBanner = document.getElementById('cookieBanner');
+  const cookieAcceptBtn = document.getElementById('cookieAccept');
+  const cookieRejectBtn = document.getElementById('cookieReject');
+  const manageCookiesBtn = document.getElementById('manageCookies');
+
+  function getConsent() {
+    try {
+      const raw = localStorage.getItem(CONSENT_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      // Re-prompt if the policy version bumped
+      if (parsed.version !== CONSENT_VERSION) return null;
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveConsent(analytics) {
+    try {
+      localStorage.setItem(CONSENT_KEY, JSON.stringify({
+        analytics: Boolean(analytics),
+        version: CONSENT_VERSION,
+        timestamp: new Date().toISOString()
+      }));
+    } catch (e) {
+      // localStorage may be blocked (private mode, quota). Fail quietly —
+      // the banner will show again next visit.
+      console.warn('Cookie consent: could not persist decision', e);
+    }
+  }
+
+  function showBanner() {
+    if (!cookieBanner) return;
+    cookieBanner.hidden = false;
+    cookieBanner.setAttribute('aria-hidden', 'false');
+  }
+
+  function hideBanner() {
+    if (!cookieBanner) return;
+    cookieBanner.hidden = true;
+    cookieBanner.setAttribute('aria-hidden', 'true');
+  }
+
+  let metricaLoaded = false;
+  function loadMetrica() {
+    if (metricaLoaded) return;
+    if (!METRICA_COUNTER_ID) {
+      // No counter configured yet — consent is recorded, but nothing to load.
+      return;
+    }
+    metricaLoaded = true;
+
+    // Standard Yandex Metrica snippet, inlined so we control exactly when
+    // the request fires.
+    (function(m, e, t, r, i, k, a) {
+      m[i] = m[i] || function() { (m[i].a = m[i].a || []).push(arguments); };
+      m[i].l = 1 * new Date();
+      for (let j = 0; j < document.scripts.length; j++) {
+        if (document.scripts[j].src === r) return;
+      }
+      k = e.createElement(t);
+      a = e.getElementsByTagName(t)[0];
+      k.async = 1;
+      k.src = r;
+      a.parentNode.insertBefore(k, a);
+    })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+    window.ym(METRICA_COUNTER_ID, 'init', {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true,
+      trackHash: true
+    });
+  }
+
+  // Boot: restore decision or show banner
+  const storedConsent = getConsent();
+  if (storedConsent === null) {
+    showBanner();
+  } else if (storedConsent.analytics === true) {
+    loadMetrica();
+  }
+  // else: user rejected analytics previously, do nothing
+
+  if (cookieAcceptBtn) {
+    cookieAcceptBtn.addEventListener('click', () => {
+      saveConsent(true);
+      hideBanner();
+      loadMetrica();
+    });
+  }
+  if (cookieRejectBtn) {
+    cookieRejectBtn.addEventListener('click', () => {
+      saveConsent(false);
+      hideBanner();
+    });
+  }
+  if (manageCookiesBtn) {
+    manageCookiesBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showBanner();
     });
   }
 });
