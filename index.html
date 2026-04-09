@@ -43,14 +43,22 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
+      "@id": "https://nailmardamshin.github.io/forge/#service",
       "@type": "ProfessionalService",
       "name": "Forge",
       "alternateName": "Forge AI",
+      "slogan": "Внедряем AI в бизнес",
       "description": "Внедрение AI в бизнес-процессы: автоматизация рутины, генерация контента, аналитика, боты по базе знаний. 3-4 недели, фикс-прайс.",
       "url": "https://nailmardamshin.github.io/forge/",
       "logo": "https://nailmardamshin.github.io/forge/assets/favicon.svg",
       "image": "https://nailmardamshin.github.io/forge/assets/images/og-image.png",
       "priceRange": "$$$",
+      "serviceType": [
+        "Внедрение искусственного интеллекта",
+        "Автоматизация бизнес-процессов",
+        "Разработка AI-ассистентов",
+        "Базы знаний с RAG"
+      ],
       "areaServed": {
         "@type": "Country",
         "name": "Russia"
@@ -60,6 +68,18 @@
         "name": "Наиль Мардамшин",
         "jobTitle": "Основатель",
         "url": "https://t.me/nmardamshin"
+      },
+      "parentOrganization": {
+        "@type": "Organization",
+        "name": "Tetraform",
+        "url": "https://tetraform.art",
+        "description": "Digital-студия, из которой вырос Forge. 7 лет в разработке, 200+ проектов для enterprise."
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "url": "https://t.me/nmardamshin",
+        "availableLanguage": ["Russian"]
       },
       "sameAs": [
         "https://t.me/nmardamshin",
@@ -158,6 +178,21 @@
           }
         }
       ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://nailmardamshin.github.io/forge/#website",
+      "name": "Forge",
+      "alternateName": "Forge AI",
+      "url": "https://nailmardamshin.github.io/forge/",
+      "inLanguage": "ru-RU",
+      "description": "Внедрение AI в бизнес-процессы за 3-4 недели. Фикс-прайс, открытый стек.",
+      "publisher": {
+        "@id": "https://nailmardamshin.github.io/forge/#service"
+      }
     }
     </script>
 </head>
