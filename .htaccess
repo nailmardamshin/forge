@@ -1,0 +1,125 @@
+# Forge Landing — Apache config for Beget shared hosting
+# Replaces vercel.json functionality: clean URLs, security headers, cache, redirects
+
+# ── Force HTTPS ──────────────────────────────────────────────────────
+# Beget handles HTTP→HTTPS redirect server-side (panel toggle).
+# Don't enable here — would create a redirect loop.
+
+# ── www → non-www redirect ───────────────────────────────────────────
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+# ── API endpoint (BEFORE clean URL rules!) ───────────────────────────
+# /api/lead → /api/lead.php — so fetch('/api/lead') in main.js works unchanged
+
+RewriteRule ^api/lead$ api/lead.php [L,QSA]
+
+# ── Clean URLs (remove .html from URLs) ──────────────────────────────
+# /legal/privacy-policy → /legal/privacy-policy.html
+# Matches: single segment (index, robots) and two-segment paths (legal/consent)
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/?$ $1.html [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/([^/]+)/?$ $1/$2.html [L]
+
+# ── Block access to sensitive files ──────────────────────────────────
+
+<FilesMatch "^\.env$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^config\.php$">
+    Require all denied
+</FilesMatch>
+
+# Block dotfiles (.git, .gitignore, .DS_Store, etc.)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Block markdown and other non-public files
+<FilesMatch "\.(md|log)$">
+    Require all denied
+</FilesMatch>
+
+# ── Security headers ─────────────────────────────────────────────────
+# 1:1 from vercel.json
+
+<IfModule mod_headers.c>
+    # Global security headers
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+    # CSP — same as vercel.json
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://mc.yandex.ru https://mc.yandex.com https://mc.webvisor.com https://mc.webvisor.org; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://mc.yandex.ru https://mc.yandex.com https://mc.webvisor.com https://mc.webvisor.org; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://mc.webvisor.com https://mc.webvisor.org wss://mc.yandex.ru wss://mc.yandex.com wss://mc.webvisor.com wss://mc.webvisor.org; frame-src https://mc.yandex.ru https://mc.yandex.com; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+
+    # HSTS — 2 years, includes subdomains, eligible for preload list
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+</IfModule>
+
+# ── Cache headers ────────────────────────────────────────────────────
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Fonts — 1 year, immutable
+    <FilesMatch "\.(woff2|woff|ttf|otf|eot)$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+
+    # Images, icons — 1 year
+    <FilesMatch "\.(svg|png|jpg|jpeg|gif|ico|webp|avif)$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # CSS, JS — 1 year (cache-busted via ?v= in index.html)
+    <FilesMatch "\.(css|js)$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # HTML — no long cache (must get fresh on deploy)
+    <FilesMatch "\.html$">
+        ExpiresDefault "access plus 0 seconds"
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# ── MIME types ───────────────────────────────────────────────────────
+
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType text/css .css
+    AddType image/svg+xml .svg
+    AddType font/woff2 .woff2
+    AddType application/json .json
+</IfModule>
+
+# ── Compression ──────────────────────────────────────────────────────
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml font/woff2
+</IfModule>
+
+# ── Prevent directory listing ────────────────────────────────────────
+
+Options -Indexes
+
+# ── PHP version (Beget-specific) ─────────────────────────────────────
+# Uncomment the line matching the PHP version available on your Beget plan.
+# Check in Beget panel → PHP → change version to 8.1+
+
+# AddHandler application/x-httpd-php81 .php
+# AddHandler application/x-httpd-php82 .php
+# AddHandler application/x-httpd-php83 .php
