@@ -116,10 +116,4 @@ RewriteRule ^([^/]+)/([^/]+)/?$ $1/$2.html [L]
 
 Options -Indexes
 
-# ── PHP version (Beget-specific) ─────────────────────────────────────
-# Uncomment the line matching the PHP version available on your Beget plan.
-# Check in Beget panel → PHP → change version to 8.1+
-
-# AddHandler application/x-httpd-php81 .php
-# AddHandler application/x-httpd-php82 .php
-# AddHandler application/x-httpd-php83 .php
+# PHP version: switch in Beget panel → Хостинг → ⚙️ → PHP 8.2
