@@ -9,6 +9,14 @@
 
 ## Workflow внесения изменений
 
+```
+Локально → git push → GitHub (источник истины)
+                       ├─→ Vercel staging  (автомат, ~30 сек)
+                       └─→ Beget production (forge-deploy, ~3 сек)
+```
+
+GitHub — главный. Vercel сам синхронится при push. Beget нужно толкнуть командой `forge-deploy`.
+
 ```bash
 cd /Users/Nail/Desktop/claude-code/Forge/Assets/landing
 
@@ -22,9 +30,18 @@ git add .
 git commit -m "описание изменений"
 git push
 
-# 4. Ждёшь ~30 секунд — Vercel сам задеплоит
-# 5. Проверяешь на живом сайте
+# 4. Деплоишь на Beget production (одна команда):
+forge-deploy
+
+# 5. Проверяешь forge-ai.io
 ```
+
+**Алиас `forge-deploy`** живёт в `~/.zshrc` и делает:
+```bash
+ssh nailma2c@nailma2c.beget.tech 'cd ~/forge-ai.io/public_html && git pull'
+```
+
+Если алиас не работает в текущем терминале — выполни `source ~/.zshrc` или открой новый таб.
 
 ## Структура проекта
 
@@ -177,103 +194,112 @@ PHP-скрипт `api/lead.php` — 1:1 порт `api/lead.js`:
 | `TELEGRAM_BOT_TOKEN` | `~/Desktop/claude-code/Syl/.env` → `TELEGRAM_BOT_TOKEN` | Уведомления через Syl-бота |
 | `TELEGRAM_CHAT_ID` | `210506677` (Telegram user_id Наиля) | Куда слать уведомления |
 
-### Workflow (Beget)
+### Workflow (Beget) — два шага после правок
 
 ```bash
-cd /Users/Nail/Desktop/claude-code/Forge/Assets/landing
+git push        # GitHub получает изменения, Vercel-staging обновляется автоматом
+forge-deploy    # Beget подтягивает через git pull, ~3 секунды
+```
 
-# 1. Редактируешь файлы
-# 2. При изменении CSS или JS — обязательно обнови cache buster в index.html:
-#    <link rel="stylesheet" href="style.css?v=YYYYMMDD_slug">
-
-# 3. Коммитишь и пушишь:
-git add .
-git commit -m "описание изменений"
-git push
-
-# 4. Beget подтягивает через git-deploy (~1-2 мин)
-# 5. Vercel деплоит staging (~30 секунд)
-# 6. Проверяешь на живом сайте
+`forge-deploy` — алиас в `~/.zshrc`:
+```bash
+alias forge-deploy='ssh nailma2c@nailma2c.beget.tech "cd ~/forge-ai.io/public_html && git pull"'
 ```
 
 ### Деплой на Beget (первоначальная настройка)
 
-> Пошаговая инструкция — делать ОДИН РАЗ при миграции
+> Пошаговая инструкция — делать ОДИН РАЗ при миграции. Если уже всё настроено — пропускай.
 
 #### Шаг 1: Создать хостинг на Beget
 
 1. Зайти в [beget.com](https://beget.com) → Панель управления
-2. **Сайты** → Добавить сайт → `forge-ai.io`
+2. **Хостинг** → **Сайты** → Создать сайт → имя: `forge-ai.io`
 3. Beget создаст структуру `~/forge-ai.io/public_html/`
 
-#### Шаг 2: Переключить PHP на 8.1+
+#### Шаг 2: Включить PHP 8.1+ и SSH
 
-1. **Сайты** → `forge-ai.io` → **PHP** → выбрать **8.1** или выше
-2. Убедиться что модули включены: `curl`, `mbstring`, `json` (обычно по умолчанию)
+1. **Хостинг** → **Сайты** → ⚙️ настройки сайта → **PHP 8.2**, **HTTP/2 ON**, **редирект HTTP→HTTPS ON**
+2. На дашборде Хостинг — включить тоггл **SSH-доступ**
+3. Сменить SSH-пароль: **Хостинг** → **FTP** → клик по `/forge-ai.io/public_html` → сменить пароль (он же SSH-пароль)
 
-#### Шаг 3: Создать `.env` с секретами
+#### Шаг 3: Скопировать SSH-ключ на сервер (для passwordless деплоя)
 
-1. Через **SSH** (`ssh <login>@<login>.beget.tech`) или **Файловый менеджер** в панели
-2. Перейти в `~/forge-ai.io/` (НЕ в `public_html/`!)
-3. Создать файл `.env`:
+С локального мака:
+```bash
+ssh-copy-id nailma2c@nailma2c.beget.tech
+# Введёшь пароль один раз — ключ ляжет в ~/.ssh/authorized_keys на сервере
+```
+
+После этого `ssh nailma2c@nailma2c.beget.tech` работает без пароля.
+
+#### Шаг 4: Создать `.env` с секретами на сервере
+
+```bash
+ssh nailma2c@nailma2c.beget.tech
+cd ~/forge-ai.io
+nano .env
+```
+
+Содержимое:
+```
+AIRTABLE_API_KEY=pat...ваш_токен...
+TELEGRAM_BOT_TOKEN=123456:ABC...ваш_токен...
+TELEGRAM_CHAT_ID=210506677
+```
+
+⚠️ **`.env` лежит в `~/forge-ai.io/.env`**, а НЕ в `public_html/`. Это специально — недоступен по HTTP.
+
+Токены:
+- `AIRTABLE_API_KEY` — Vercel Dashboard → Settings → Environment Variables
+- `TELEGRAM_BOT_TOKEN` — `~/Desktop/claude-code/Syl/.env` локально
+- `TELEGRAM_CHAT_ID` — `210506677`
+
+После создания: `chmod 600 .env`
+
+#### Шаг 5: Git clone репо в public_html
+
+```bash
+ssh nailma2c@nailma2c.beget.tech
+cd ~/forge-ai.io
+mv public_html public_html.bak       # бэкап на всякий
+git clone https://github.com/nailmardamshin/forge.git public_html
+ls -la public_html/                  # проверить что файлы на месте
+```
+
+После этого `git pull` в `public_html/` обновляет сайт за секунды.
+
+#### Шаг 6: Добавить алиас на локальном маке
+
+```bash
+echo "alias forge-deploy='ssh nailma2c@nailma2c.beget.tech \"cd ~/forge-ai.io/public_html && git pull\"'" >> ~/.zshrc
+source ~/.zshrc
+```
+
+#### Шаг 7: Включить SSL
+
+1. **Домены** → ⋮ рядом с `forge-ai.io` → **Управление SSL сертификатами** → **LetsEncrypt** (бесплатно)
+2. Подождать 5-15 минут (выпуск сертификата)
+3. После выпуска — придёт письмо «Сертификат установлен»
+4. HTTPS-редирект и HSTS уже включены: первый — в настройках сайта Beget (тоггл), второй — в `.htaccess`
+
+#### Шаг 8: Переключить NS на Beget (или DNS A-запись)
+
+Beget полностью управляет SSL и виртуалхостами только когда домен использует **его NS-серверы**. Поэтому самый надёжный путь — переключить NS у регистратора:
+
+1. Зайти в **reg.ru** → управление доменом `forge-ai.io` → **DNS-серверы**
+2. Заменить текущие NS на:
    ```
-   AIRTABLE_API_KEY=pat...ваш_токен...
-   TELEGRAM_BOT_TOKEN=123456:ABC...ваш_токен...
-   TELEGRAM_CHAT_ID=210506677
+   ns1.beget.com
+   ns2.beget.com
+   ns1.beget.pro
+   ns2.beget.pro
    ```
-4. Значения токенов взять:
-   - `AIRTABLE_API_KEY` — из Vercel Dashboard → Settings → Environment Variables
-   - `TELEGRAM_BOT_TOKEN` — из `~/Desktop/claude-code/Syl/.env`
-   - `TELEGRAM_CHAT_ID` — `210506677`
+3. Сохранить. Пропагация — от 15 минут до нескольких часов
+4. Beget сам пропишет правильную A-запись (`45.130.41.162` или другой IP, выделенный для сайта)
 
-#### Шаг 4: Настроить Git-деплой
+> ⚠️ **Важно про IP:** `87.236.19.23` — это SSH-сервер `serena1`, а не IP вебсервера. Реальный IP сайта смотри в **Домены** → **DNS** → запись A для `forge-ai.io`. Если используешь внешний DNS — A-запись должна указывать именно туда.
 
-1. В панели Beget → **Git** (или **Деплой**)
-2. Привязать репозиторий `nailmardamshin/forge`
-3. Ветка: `main`
-4. Папка деплоя: `forge-ai.io/public_html`
-5. Автодеплой при push: **включить**
-
-Альтернатива (если Git-деплой недоступен):
-- Через SSH: `cd ~/forge-ai.io/public_html && git clone https://github.com/nailmardamshin/forge.git .`
-- Обновление: `cd ~/forge-ai.io/public_html && git pull`
-
-#### Шаг 5: Включить SSL
-
-1. **Сайты** → `forge-ai.io` → **SSL** → **Бесплатный SSL (Let's Encrypt)**
-2. Подождать ~5 минут (выпуск сертификата)
-3. После подтверждения SSL — раскомментировать в `.htaccess` строки HTTPS-редиректа:
-   ```apache
-   RewriteEngine On
-   RewriteCond %{HTTPS} off
-   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-   ```
-4. Позже — раскомментировать HSTS-заголовок (после проверки что всё работает)
-
-#### Шаг 6: Переключить DNS в Cloudflare
-
-> ⚠️ Делать ПОСЛЕ успешного деплоя и SSL!
-
-1. Зайти в [Cloudflare Dashboard](https://dash.cloudflare.com) → `forge-ai.io` → **DNS**
-2. Узнать IP сервера Beget: в панели Beget → **Сайты** → `forge-ai.io` → IP-адрес (или через SSH: `hostname -I`)
-
-3. **Изменить A-запись** `forge-ai.io`:
-   - Type: `A`
-   - Name: `@` (или `forge-ai.io`)
-   - Content: `<IP Beget>`
-   - Proxy: **OFF** (серое облачко, DNS only) — **КРИТИЧНО!** Оранжевое = Cloudflare proxy = блокируется РКН
-   - TTL: `5 min` (вернуть `Auto` после стабилизации)
-
-4. **Изменить запись для www**:
-   - Type: `A`
-   - Name: `www`
-   - Content: `<IP Beget>` (тот же IP)
-   - Proxy: **OFF** (серое облачко)
-
-5. Подождать 5-15 минут (DNS propagation с TTL 300)
-6. Проверить: `dig forge-ai.io` → должен показать IP Beget
-
-#### Шаг 7: Проверить
+#### Шаг 9: Проверить
 
 Открыть `https://forge-ai.io` **без VPN** с телефона на мобильном интернете.
 
@@ -288,18 +314,18 @@ git push
 - [ ] `/legal/privacy-policy` — открывается (без .html в URL)
 - [ ] `/legal/consent` — открывается
 - [ ] SSL: замочек в адресной строке, нет mixed content warnings
-- [ ] `http://forge-ai.io` → редирект на `https://` (после раскомментирования в .htaccess)
+- [ ] `http://forge-ai.io` → редирект на `https://` (включается в настройках сайта Beget)
 - [ ] `www.forge-ai.io` → редирект на `forge-ai.io`
 - [ ] Мобилка: вёрстка, форма, модалка — всё ок
 - [ ] Cookie-баннер: появляется, Accept загружает Метрику, Reject — нет
-- [ ] Security headers: DevTools → Network → Response Headers (X-Frame-Options, CSP и др.)
+- [ ] Security headers: DevTools → Network → Response Headers (X-Frame-Options, CSP, HSTS)
 - [ ] `robots.txt` и `sitemap.xml` — доступны
-- [ ] `/.env` → 403 Forbidden (не отдаётся по HTTP)
+- [ ] `/.env` → 405 Not Allowed (не отдаётся, контент скрыт)
 - [ ] Vercel staging (`forge-ai.vercel.app` или через VPN) — по-прежнему работает
 
 ### Rollback
 
-Если что-то пошло не так — вернуть DNS в Cloudflare:
+Если что-то пошло не так — вернуть NS обратно на Cloudflare в reg.ru, в Cloudflare поставить A-запись на старый IP:
 1. A-запись `forge-ai.io` → IP Vercel (или CNAME → `cname.vercel-dns.com`)
 2. Proxy: **ON** (оранжевое облачко) — если нужен Vercel
 3. TTL обновится за 5 минут
@@ -317,9 +343,15 @@ git push
 2. `curl -I https://api.telegram.org` → проверить что доступен
 3. Если 000/timeout → API заблокирован из ДЦ Beget → проксировать через VPS
 
-#### SSL не выпускается
-1. DNS уже переключен на Beget? Let's Encrypt валидирует через HTTP → IP должен быть Beget
-2. В Cloudflare proxy OFF (серое облачко)?
-3. Подождать 10-15 минут, повторить
+#### SSL не выпускается / HTTPS не отдаёт сертификат
+1. NS уже переключены на Beget? Если используешь внешний DNS (Cloudflare/reg.ru) — A-запись должна указывать на **правильный IP** из Beget DNS-панели (не на SSH-сервер!)
+2. Подождать 10-15 минут, повторить
+3. Если в `openssl s_client -connect forge-ai.io:443` видишь `no peer certificate available` — IP в DNS не совпадает с виртуалхостом Beget. Проверь IP
+
+#### `forge-deploy` не работает
+1. Проверь алиас: `alias | grep forge-deploy`
+2. Если нет — `source ~/.zshrc` или открыть новый таб
+3. SSH-доступ выключился? Проверь тоггл в Beget → Хостинг
+4. Ключ потерялся: `ssh-copy-id nailma2c@nailma2c.beget.tech`
 
 ---
